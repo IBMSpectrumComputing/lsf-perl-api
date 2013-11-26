@@ -58,7 +58,8 @@ Version History
   test.pl can be used as normal. test_launch.pl is used in test.pl.
   Added the document for the APIs, which can be viewed with perldoc.
 
-
+- Version 1.01 27/11/2013:
+  Updated for LSF 9.1.2.
 
 =========================
 Copyright
