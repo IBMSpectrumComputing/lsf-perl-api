@@ -1,0 +1,36 @@
+TYPEMAP
+float * FLOATPtr
+LSF_Base_lsInfo * T_PTROBJ_SPECIAL
+LSF_Base_resItem * T_PTROBJ_SPECIAL
+LSF_Base_hostInfo * T_PTROBJ_SPECIAL
+LSF_Base_hostLoad * T_PTROBJ_SPECIAL
+LSF_Base_rusage * T_PTROBJ_SPECIAL
+LSF_Base_lsfAcctRec * T_PTROBJ_SPECIAL
+enum orderType T_ENUM
+enum valueType T_ENUM
+int * T_PACKED
+HV *  T_HVREF_pmf
+
+INPUT
+T_HVREF_pmf
+	if (SvTYPE(SvRV($arg))==SVt_PVHV)
+	    $var = (HV*)SvRV($arg);
+	else
+	    croak(\"$var is not a hash refrence\")
+
+T_PTROBJ_SPECIAL
+    if (sv_derived_from($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\")) {
+        IV tmp = SvIV((SV*)SvRV($arg));
+        $var = ($type) tmp;
+    }
+    else
+        croak(\"$var is not of type ${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\")
+
+OUTPUT
+T_PTROBJ_SPECIAL
+    sv_setref_iv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\",
+    (IV)$var);
+
+FLOATPtr
+	sv_setnv($arg, (double) *$var );
+

@@ -1,0 +1,111 @@
+TYPEMAP
+LSF_Batch_job * T_PTROBJ_SPECIAL
+LSF_Batch_submit * T_PTROBJ_SPECIAL
+LSF_Batch_hostInfo * T_PTROBJ_SPECIAL
+LSF_Batch_userInfo * T_PTROBJ_SPECIAL
+LSF_Batch_parameterInfo * T_PTROBJ_SPECIAL
+LSF_Batch_queueInfo * T_PTROBJ_SPECIAL
+LSF_Batch_jobInfo * T_PTROBJ_SPECIAL
+LSF_Batch_jRusage * T_PTROBJ_SPECIAL
+LSF_Batch_shareAcctInfo * T_PTROBJ_SPECIAL
+LSF_Batch_sharedResourceInfo * T_PTROBJ_SPECIAL
+LSF_Batch_sharedResourceInstance * T_PTROBJ_SPECIAL
+LSF_Batch_hostPartInfo * T_PTROBJ_SPECIAL
+LSF_Batch_hostPartUserInfo * T_PTROBJ_SPECIAL
+LSF_Batch_parameterInfo * T_PTROBJ_SPECIAL
+LSF_Batch_eventRec * T_PTROBJ_SPECIAL
+LSF_Batch_logSwitchLog * T_PTROBJ_SPECIAL
+LSF_Batch_jgrpNewLog * T_PTROBJ_SPECIAL
+LSF_Batch_jgrpCtrlLog * T_PTROBJ_SPECIAL
+LSF_Batch_jgrpStatusLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobNewLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobModLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobStartLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobStartAcceptLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobExecuteLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobStatusLog * T_PTROBJ_SPECIAL
+LSF_Batch_sbdJobStatusLog * T_PTROBJ_SPECIAL
+LSF_Batch_sbdUnreportedStatusLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobSwitchLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobMoveLog * T_PTROBJ_SPECIAL
+LSF_Batch_chkpntLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobRequeueLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobCleanLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobExceptionLog * T_PTROBJ_SPECIAL
+LSF_Batch_sigactLog * T_PTROBJ_SPECIAL
+LSF_Batch_migLog * T_PTROBJ_SPECIAL
+LSF_Batch_signalLog * T_PTROBJ_SPECIAL
+LSF_Batch_queueCtrlLog * T_PTROBJ_SPECIAL
+LSF_Batch_newDebugLog * T_PTROBJ_SPECIAL
+LSF_Batch_hostCtrlLog * T_PTROBJ_SPECIAL
+LSF_Batch_mbdStartLog * T_PTROBJ_SPECIAL
+LSF_Batch_mbdDieLog * T_PTROBJ_SPECIAL
+LSF_Batch_unfulfillLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobFinishLog * T_PTROBJ_SPECIAL
+LSF_Batch_loadIndexLog * T_PTROBJ_SPECIAL
+LSF_Batch_calendarLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobForwardLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobAcceptLog * T_PTROBJ_SPECIAL
+LSF_Batch_statusAckLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobMsgLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobMsgAckLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobOccupyReqLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobVacatedLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobForceRequestLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobChunkLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobExternalMsgLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobAttrSetLog * T_PTROBJ_SPECIAL
+LSF_Batch_rsvFinishLog * T_PTROBJ_SPECIAL
+LSF_Batch_hgCtrlLog * T_PTROBJ_SPECIAL
+LSF_Batch_cpuProfileLog * T_PTROBJ_SPECIAL
+LSF_Batch_jobRunRusageLog * T_PTROBJ_SPECIAL
+LSF_Batch_dataLoggingLog * T_PTROBJ_SPECIAL
+LSF_Batch_eventEOSLog * T_PTROBJ_SPECIAL
+LSF_Batch_slaLog * T_PTROBJ_SPECIAL
+LSF_Batch_perfmonLog * T_PTROBJ_SPECIAL
+LSF_Batch_rsvRes * T_PTROBJ_SPECIAL
+LSF_Batch_xFile * T_PTROBJ_SPECIAL
+LSF_Batch_lsfRusage * T_PTROBJ_SPECIAL
+LSF_Batch_apsFactorMap * T_PTROBJ_SPECIAL
+LSF_Batch_apsLongNameMap * T_PTROBJ_SPECIAL
+LSF_Batch_apsFactorInfo * T_PTROBJ_SPECIAL
+LSF_Batch_apsFactorMap * T_PTROBJ_SPECIAL
+LSF_Batch_jobExternalMsgReply * T_PTROBJ_SPECIAL
+LSF_Batch_jobInfoHead * T_PTROBJ_SPECIAL  
+LSF_Batch_rsvInfoEnt * T_PTROBJ_SPECIAL
+LSF_Batch_hostRsvInfoEnt * T_PTROBJ_SPECIAL
+LSF_Batch_pidInfo * T_PTROBJ_SPECIAL
+LS_LONG_INT * T_PTROBJ_SPECIAL             
+float T_FLOAT
+int * T_PACKED
+HV *  T_HVREF_pmf
+char ** T_PACKEDARRAY
+
+INPUT
+T_HVREF_pmf
+	if (SvTYPE(SvRV($arg))==SVt_PVHV)
+	    $var = (HV*)SvRV($arg);
+	else
+	    croak(\"$var is not a hash refrence\")
+
+T_PACKEDARRAY
+       $var = XS_unpack_$ntype($arg)
+
+T_PTROBJ_SPECIAL
+    if (sv_derived_from($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\")) {
+        IV tmp = SvIV((SV*)SvRV($arg));
+        $var = ($type) tmp;
+    }
+    else if( $arg == &PL_sv_undef ){
+	$var = ($type)NULL;
+    }
+    else
+        croak(\"$var is not of type ${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\")
+
+OUTPUT
+T_PTROBJ_SPECIAL
+    sv_setref_iv($arg, \"${(my $ntt=$ntype)=~s/_/::/g;\$ntt}\",
+    (IV)$var);
+
+T_PACKEDARRAY
+   XS_pack_$ntype($arg, $var);

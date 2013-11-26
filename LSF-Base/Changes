@@ -1,0 +1,28 @@
+Revision history for Perl extension LSF::Base.
+
+0.01  Mon Oct 18 13:55:43 1999
+	- original version; created by h2xs 1.18
+
+
+0.03 6/01/2000
+	- Synced version with LSF::Batch. Added new Makefile.PL. 
+	  Fixed a bug or two.
+
+0.04 3/28/2001
+   	- Updated for LSF 4.0/4.1.
+
+	- Added support for other operating systems. Now works with
+	  Compaq Alpha, Linux, AIX and Solaris. Thanks to Ray Hookway at
+	  Compaq for Alpha changes.
+
+0.06 4/30/2008
+    - Updated for LSF 7.0 Update 2.
+
+    - Modify some APIs according to LSF 7.0 Update 2. Test all the 
+	  APIs on LSF 7.0 Update 2 on Linux 2.6 X86 and Solaris 10 X86_64. 
+
+0.07 6/13/2008
+    - Updated for LSF 7.0 Update 2.
+
+	- Added document of the APIs.
+                                  
