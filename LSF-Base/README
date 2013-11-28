@@ -8,31 +8,47 @@ Access IBM Platform Computing's LSF Base API from Perl.
 
 
 
-================
+==========================
 CONTENTS
-================
+==========================
  
  Overview
+ Installation
  Version History
+ Community Contribution
  Copyright
 
 
 
-================
+==========================
 Overview
-================
+==========================
 
-LSF 9.1.2 supports Perl APIs. 
-Most of the functions in the API have been implemented and tested, but
-the formal test.pl has not been extensively tested. The Testlist file 
-shows which calls have been tested. This has now been tested on both 
-AIX and Solaris.
+This library allows you to call the LSF APIs from Perl. The wrapper is created
+by using xsubpp.
 
+This is an IBM Platform Computing fork of the original LSF-Base-0.07 
+which can be found at http://search.cpan.org/~lsfisv/.
 
+IBM Platform Computing will provide formal support for this sofeware, 
+to entitled clients, via the normal IBM support channels.
 
-================
+==========================
+Installation
+==========================
+
+Before compiling the library, LSF environment variables should set firstly.
+
+To compile and install the library, go to the source directory
+and type:
+
+  $ perl Makefile.PL
+  $ make
+  $ sudo make install
+
+==========================
 Version History
-================
+==========================
 
 - Version 0.01 12/21/1999:
   First public release. Some functions were not totally debugged and not
@@ -58,7 +74,27 @@ Version History
   Added the document for the APIs, which can be viewed with perldoc.
 
 - Version 1.01 27/11/2013:
-  Updated for LSF 9.1.2.
+  IBM Platform Computing refreshed LSF-Base-0.07 and provide formal support.
+  Tested with LSF 9.1.2 on Linux 2.6.
+
+==========================
+Community Contribution
+==========================
+ Community contributions to this branch need to follow the IBM 
+ DCO(Developer's Certificate of Origin) process:
+
+ 1. Contributor proposes new code to community.
+
+ 2. Contributor signs off on contributions, 
+    i.e. attach the DCO to ensure contributor is either the code 
+    originator or has rights to publish. The template of the DCO is included in
+    this package.
+ 
+ 3. LSF Development reviews contribution to check for
+    i) applicability and relevancy of functional contents and 
+    ii) any obvious issues.
+
+ 4. If Accept, post contribution, if Reject, back to contributor and no posting.
 
 =========================
 Copyright
