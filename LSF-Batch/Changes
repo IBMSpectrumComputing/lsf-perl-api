@@ -23,7 +23,7 @@ Revision history for Perl extension LSF::Batch.
       -  This is an IBM Platform Computing fork of the original LSF-Batch-0.06 
           which can be found at  http://search.cpan.org/~lsfisv/.
 
-      -  IBM Platform Computing will provide formal support for this sofeware, 
+      -  IBM Platform Computing will provide formal support for this software, 
          to entitled clients, via the normal IBM support channels.
      
       -  Tested with LSF 9.1.2 on Linux 2.6.
