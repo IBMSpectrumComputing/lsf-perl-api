@@ -1,10 +1,9 @@
 Readme file for: LSF
 Product/Component Release: 9.1.2
 Publication date: 21 October 2013
-Last modified: 21 October 2013
+Last modified: 3 December 2013
 
 Access IBM Platform Computing's LSF Batch API from Perl.
-
 
 
 ==========================
@@ -18,7 +17,6 @@ CONTENTS
  Copyright
 
 
-
 ==========================
 Overview
 ==========================
@@ -29,14 +27,15 @@ by using xsubpp.
 This is an IBM Platform Computing fork of the original LSF-Batch-0.06 
 which can be found at http://search.cpan.org/~lsfisv/.
 
-IBM Platform Computing will provide formal support for this software, 
-to entitled clients, via the normal IBM support channels.
+IBM Platform Computing will provide formal support for this software 
+to entitled clients via the normal IBM support channels.
+
 
 ==========================
 Installation
 ==========================
 
-Before compiling the library, LSF environment variables should set firstly.
+Before compiling the library, set LSF environment variables.
 
 To compile and install the library, go to the source directory
 and type:
@@ -44,6 +43,7 @@ and type:
   $ perl Makefile.PL
   $ make
   $ sudo make install
+
 
 ==========================
 Version History
@@ -75,27 +75,30 @@ Version History
   Added the document for the APIs, which can be viewed with perldoc.
 
 - Version 1.01 27/11/2013:
-  IBM Platform Computing refreshed LSF-Batch-0.06 and provide formal support.
+  IBM Platform Computing refreshed LSF-Batch-0.06 and provides formal support.
   Tested with LSF 9.1.2 on Linux 2.6.
+
 
 ==========================
 Community Contribution
 ==========================
- Community contributions to this branch need to follow the IBM 
- DCO(Developer's Certificate of Origin) process:
+
+Community contributions to this branch must follow the IBM 
+Developer's Certificate of Origin (DCO) process:
 
  1. Contributor proposes new code to community.
 
- 2. Contributor signs off on contributions, 
-    i.e. attach the DCO to ensure contributor is either the code 
+ 2. Contributor signs off on contributions 
+    (i.e. attachs the DCO to ensure contributor is either the code 
     originator or has rights to publish. The template of the DCO is included in
-    this package.
+    this package).
  
- 3. LSF Development reviews contribution to check for
-    i) applicability and relevancy of functional contents and 
-    ii) any obvious issues.
+ 3. LSF Development reviews contribution to check for:
+    i)  Applicability and relevancy of functional content 
+    ii) Any obvious issues
 
- 4. If Accept, post contribution, if Reject, back to contributor and no posting.
+ 4. If accepted, posts contribution. If rejected, work goes back to contributor and is not posted.
+
 
 =========================
 Copyright

@@ -1,30 +1,46 @@
 Revision history for Perl extension LSF::Batch.
 
+
+
 0.01  Mon Dec 13 15:46:23 1999
-	- original version; created by h2xs 1.18
+
+	- original version; created by h2xs 
+
+1.18
 
 
 0.05  Wednesday April 30 2008
 
-        - Updated for LSF 7.0 Update 2.
+        
+	- Updated for LSF 7.0 Update 2.
 
-	- Modify some APIs according to LSF 7.0 Update 2. Test all the
-	  APIs on LSF 7.0 Update 2 on Linux 2.6 X86 and Solaris 10 X86_64.
+	
+	- Modify some APIs according to LSF 7.0 Update 2. 
+	  Test all the
+ APIs on LSF 7.0 Update 2 on Linux 2.6 X86 and Solaris 10 X86_64.
+
+
 
 0.06 Friday June 13 2008
    
-       - Updated for LSF 7.0 Update 2.
        
-       - Add some APIs according to LSF 7.0 Update 2. Test these  APIs on 
-         LSF 7.0 Update 2 on Linux 2.6 X86 and Solaris 10 X86_64.
+	- Updated for LSF 7.0 Update 2.
        
+       
+	- Add some APIs according to LSF 7.0 Update 2. Test these  APIs on 
+          LSF 7.0 Update 2 on Linux 2.6 X86 and Solaris 10 X86_64.
+      
+
 1.01 Wednesday Dec 27 2013
 
-      -  This is an IBM Platform Computing fork of the original LSF-Batch-0.06 
-          which can be found at  http://search.cpan.org/~lsfisv/.
+      
+	-  This is an IBM Platform Computing fork of the original LSF-Batch-0.06 
+	   which can be found at  http://search.cpan.org/~lsfisv/.
 
-      -  IBM Platform Computing will provide formal support for this software, 
-         to entitled clients, via the normal IBM support channels.
+      
+	-  IBM Platform Computing will provide formal support for this software
+	   to entitled clients via the normal IBM support channels.
      
-      -  Tested with LSF 9.1.2 on Linux 2.6.
+      
+	-  Tested with LSF 9.1.2 on Linux 2.6.
 
