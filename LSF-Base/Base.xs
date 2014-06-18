@@ -35,6 +35,10 @@ typedef struct rusage LSF_Base_rusage;
 /*set $@ to lsf error message*/
 #define SET_LSF_ERRMSG sv_setpv(GvSV(PL_errgv),ls_sysmsg())
 
+#ifndef STATUS_NATIVE_SET
+#define STATUS_NATIVE_SET STATUS_NATIVE_CHILD_SET
+#endif
+
 static int li_ni = 0;
 
 MODULE = LSF::Base		PACKAGE = LSF::Base		PREFIX = ls_
