@@ -1,5 +1,6 @@
 package LSF::Batch;
 
+no warnings 'once';
 #use strict;
 use Carp;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $AUTOLOAD);
@@ -7,7 +8,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $AUTOLOAD);
 use Exporter;
 use DynaLoader;
 use LSF::Base;                                              
-@ISA = qw(Exporter Autoloader DynaLoader);    
+@ISA = qw(Exporter DynaLoader);    
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
@@ -685,8 +686,8 @@ sub AUTOLOAD {
   my $val = constant($constname, @_ ? $_[0] : 0); 
   if ($! != 0) { 
     if ($! =~ /Invalid/) { 
-      $AutoLoader::AUTOLOAD = $AUTOLOAD; 
-      goto &AutoLoader::AUTOLOAD; 
+        return if $constname eq "DESTROY";
+        croak "LSF::Batch macro $constname not defined";
     } 
     else { 
       croak "Your vendor has not defined LSF::Batch macro $constname"; 
@@ -700,7 +701,7 @@ bootstrap LSF::Batch $VERSION;
 
 # Preloaded methods go here.
 
-sub LSB_HOST_OK{my ($st) = @_; st == &HOST_STAT_OK; }
+sub LSB_HOST_OK{my ($st) = @_; ($st & &HOST_STAT_OK) != 0; }
 sub LSB_HOST_BUSY{my ($st) = @_; ($st & &HOST_STAT_BUSY) != 0;}
 sub LSB_HOST_CLOSED{my ($st) = @_; ($st & (&HOST_STAT_WIND |
                     &HOST_STAT_DISABLED | 
@@ -772,7 +773,7 @@ sub submit{
       $_ = shift;
       #print "got flag $_\n";
       die "invalid argument $_ \n" unless /^-/;
-      if( @_ and @_[0] !~ /^-/ ){
+      if( @_ and $_[0] !~ /^-/ ){
     $subreq{$_} = shift;
       }
       else{
@@ -799,7 +800,7 @@ sub brsvadd {
       $_ = shift;
       #print "got flag $_\n";
       die "invalid argument $_ \n" unless /^-/;
-      if (@_ and @_[0] !~ /^-/) {
+      if (@_ and $_[0] !~ /^-/) {
          $subreq{$_} = shift;   
       } else {
         $subreq{$_} = "";
@@ -857,7 +858,7 @@ sub modify{
     while(@_){
       $_ = shift;
       die "invalid argument $_ \n" unless /^-/;
-      if( @_ and @_[0] !~ /^-/ ){
+      if( @_ and $_[0] !~ /^-/ ){
     $subreq{$_} = shift;
       }
       else{
@@ -895,7 +896,7 @@ sub readjobmsg{
       $_ = shift;
       #print "got flag $_\n";
       die "invalid argument $_ \n" unless /^-/;
-      if (@_ and @_[0] !~ /^-/) {
+      if (@_ and $_[0] !~ /^-/) {
          $subreq{$_} = shift;   
       } else {
         $subreq{$_} = "";
@@ -917,7 +918,7 @@ sub postjobmsg{
       $_ = shift;
       #print "got flag $_ \n";
       die "invalid argument $_ \n" unless /^-/ ;
-      if(@_ and @_[0] !~ /^_/){
+      if(@_ and $_[0] !~ /^_/){
         $subreq{$_} = shift;
       }
       else{
