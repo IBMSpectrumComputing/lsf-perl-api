@@ -9505,7 +9505,13 @@ ji_status(self)
 	RETVAL = self->status;
     OUTPUT:
 	RETVAL
-
+int
+ji_maxMem(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->maxMem;
+    OUTPUT:
+	RETVAL
 int
 ji_reasons(self)
 	LSF_Batch_jobInfo *self
