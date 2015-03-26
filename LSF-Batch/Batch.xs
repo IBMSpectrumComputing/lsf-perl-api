@@ -9961,6 +9961,14 @@ ji_adminFactorVal(self)
     OUTPUT:
 	RETVAL
 
+int
+ji_runTime(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->runTime;
+    OUTPUT:
+	RETVAL
+
 #endif
 
 
