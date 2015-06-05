@@ -9961,6 +9961,14 @@ ji_adminFactorVal(self)
     OUTPUT:
 	RETVAL
 
+int
+ji_runTime(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->runTime;
+    OUTPUT:
+	RETVAL
+
 #endif
 
 
@@ -10197,6 +10205,22 @@ sub_exceptList(self)
 	LSF_Batch_submit *self
     CODE:
 	RETVAL = self->exceptList;
+    OUTPUT:
+	RETVAL
+
+int
+sub_runtimeEstimation(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->runtimeEstimation;
+    OUTPUT:
+	RETVAL
+	
+char *
+sub_sla(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->sla;
     OUTPUT:
 	RETVAL
 
