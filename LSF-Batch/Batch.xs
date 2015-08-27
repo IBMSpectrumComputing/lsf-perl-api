@@ -6475,6 +6475,152 @@ do_submit(sub)
     OUTPUT:
         RETVAL 
 
+#if LSF_VERSION >= 25 
+		
+int
+lsb_addmember(self, ob_type, identity, key_value, comments)
+	void *self
+	char *ob_type
+	char *identity
+	char *key_value 
+	char *comments
+   PREINIT:
+	LiveConfReq liveReq;
+        char * retErrMsg = NULL;
+        int ret = 0, i = 0, j = 0;
+	memset(&liveReq, 0, sizeof(LiveConfReq));
+   CODE:
+	/*Firstly, deal with all parameters*/
+	if ( strcmp(ob_type, "usergroup") == 0) {liveReq.object_type =  LiC_OBJECT_USERGROUP;}
+	else if ( strcmp(ob_type, "hostgroup") == 0) {liveReq.object_type =  LiC_OBJECT_HOSTGROUP;}
+	else if ( strcmp(ob_type, "queue") == 0) {liveReq.object_type =  LiC_OBJECT_QUEUE;}
+	else if ( strcmp(ob_type, "limit") == 0) {liveReq.object_type =  LiC_OBJECT_LIMIT;}
+	else if ( strcmp(ob_type, "gpool") == 0) {liveReq.object_type =  LiC_OBJECT_GUARPOOL;}
+	else if ( strcmp(ob_type, "user") == 0) {liveReq.object_type =  LiC_OBJECT_USER;}
+	else if ( strcmp(ob_type, "host") == 0) {liveReq.object_type =  LiC_OBJECT_HOST;}
+	else if ( strcmp(ob_type, "application") == 0) {liveReq.object_type =  LiC_OBJECT_APPLICATION;}
+	else { 
+	    char e[100];
+	    sprintf(e, "Unknown object type or type can't be matched");
+	    SET_LSB_ERRMSG_TO(e);
+	}
+        liveReq.actions = LiC_ACTION_ADDMEMBER;
+	liveReq.identity = identity;
+        i = 0, j = 0;
+	liveReq.key_value = (char *)calloc(strlen(key_value) + 1, sizeof(char));
+        while (key_value[i] != 0) {
+            if (isspace(key_value[i])){
+                if (j != 0 && !isspace(liveReq.key_value[j-1])) {
+                    liveReq.key_value[j++] = ' ';/*reserve only one space if it has several consecutive spaces */
+                }
+            } else {
+                liveReq.key_value[j++] = key_value[i];
+            }
+            i++;
+        }
+        liveReq.key_value[j] = 0;
+	liveReq.comments = comments;
+        liveReq.seq = 0;
+	/*send live configuration request to master*/
+	ret = lsb_liveconfig(&liveReq, &retErrMsg);
+        if (ret != 0){
+            char e[MSGSIZE];
+	    STATUS_NATIVE_SET(lsberrno);
+	    if (lsberrno == LSBE_LIVECONF_MBD_RETERR) {
+            	sprintf(e, "6021, %s: Request for %s <%s> partially succeeded \nErrors: %s\n", "addmember", ob_type, liveReq.identity, retErrMsg);
+	    } 
+#if LSF_VERSION >= 26
+	    else if (lsberrno == LSBE_MBD_IN_RESTART) {
+		sprintf(e, "6034, %s\n", "mbatchd is restarting. Try again later.");
+	    }
+#endif
+	    else {
+		sprintf(e, "6022, %s: Request for %s <%s> rejected\n", "addmember", ob_type, liveReq.identity); 
+		if (lsberrno == LSBE_LIVECONF_MBD_REJECT) {
+		    sprintf(e, "6023, Errors: %s\n", retErrMsg); 
+		} else {
+		    sprintf(e, "Errors: %s\n", lsb_sysmsg()); 
+		}
+            }
+	    SET_LSB_ERRMSG_TO(e);
+        }
+        RETVAL = ret;
+   OUTPUT:
+	RETVAL
+
+int
+lsb_rmmember(self, ob_type, identity, key_value, comments)
+	void *self
+        char *ob_type
+        char *identity
+        char *key_value
+        char *comments
+   PREINIT:
+        LiveConfReq liveReq;
+        char * retErrMsg = NULL;
+        int ret = 0, i = 0, j = 0;
+        memset(&liveReq, 0, sizeof(LiveConfReq));
+   CODE:
+        /*Firstly, deal with all parameters*/
+	if (strcmp(ob_type, "usergroup") == 0) {liveReq.object_type =  LiC_OBJECT_USERGROUP;}
+        else if (strcmp(ob_type, "hostgroup") == 0) {liveReq.object_type =  LiC_OBJECT_HOSTGROUP;}
+        else if (strcmp(ob_type, "queue") == 0) {liveReq.object_type =  LiC_OBJECT_QUEUE;}
+        else if (strcmp(ob_type, "limit") == 0) {liveReq.object_type =  LiC_OBJECT_LIMIT;}
+        else if (strcmp(ob_type, "gpool") == 0) {liveReq.object_type =  LiC_OBJECT_GUARPOOL;}
+        else if ( strcmp(ob_type, "user") == 0) {liveReq.object_type =  LiC_OBJECT_USER;}
+        else if ( strcmp(ob_type, "host") == 0) {liveReq.object_type =  LiC_OBJECT_HOST;}
+        else if ( strcmp(ob_type, "application") == 0) {liveReq.object_type =  LiC_OBJECT_APPLICATION;}
+	else {
+            char e[100];
+            sprintf(e, "Unknown object type or type can't be matched");
+            SET_LSB_ERRMSG_TO(e);
+        }
+        liveReq.actions = LiC_ACTION_RMMEMBER;
+        liveReq.identity = identity; 
+	i = 0, j = 0;
+	liveReq.key_value = (char *)calloc(strlen(key_value) + 1, sizeof(char));
+        while (key_value[i] != 0) {
+            if (isspace(key_value[i])){
+                if (j != 0 && !isspace(liveReq.key_value[j-1])) {
+                    liveReq.key_value[j++] = ' ';/*reserve only one space if it has several consecutive spaces */
+                }
+            } else {
+                liveReq.key_value[j++] = key_value[i];
+            }
+            i++;
+        }
+        liveReq.key_value[j] = 0;
+	liveReq.comments = comments;
+        liveReq.seq = 0;
+	/*send live configuration request to master*/
+        ret = lsb_liveconfig(&liveReq, &retErrMsg);
+        if (ret != 0){
+            char e[MSGSIZE];
+            STATUS_NATIVE_SET(lsberrno);
+            if (lsberrno == LSBE_LIVECONF_MBD_RETERR) {
+                sprintf(e, "6021, %s: Request for %s <%s> partially succeeded \nErrors: %s\n", "rmmember", ob_type, liveReq.identity, retErrMsg);
+            }
+#if LSF_VERSION >= 26
+	    else if (lsberrno == LSBE_MBD_IN_RESTART) {
+                sprintf(e, "6034, %s\n", "mbatchd is restarting. Try again later.");
+            }
+#endif
+	    else {
+                sprintf(e, "6022, %s: Request for %s <%s> rejected\n", "rmmember", ob_type, liveReq.identity);
+                if (lsberrno == LSBE_LIVECONF_MBD_REJECT) {
+                    sprintf(e, "6023, Errors: %s\n", retErrMsg);
+                } else {
+                    sprintf(e, "Errors: %s\n", lsb_sysmsg());
+                }
+            }
+            SET_LSB_ERRMSG_TO(e);
+        }
+        RETVAL = ret;
+   OUTPUT:
+	RETVAL
+
+#endif
+	
 int
 lsb_hostcontrol(self, host, opcode)
 	void *self
@@ -9506,6 +9652,8 @@ ji_status(self)
     OUTPUT:
 	RETVAL
 
+#if LSF_VERSION >= 26
+
 int
 ji_maxMem(self)
 	LSF_Batch_jobInfo *self
@@ -9513,6 +9661,8 @@ ji_maxMem(self)
 	RETVAL = self->maxMem;
     OUTPUT:
 	RETVAL
+
+#endif
 
 int
 ji_reasons(self)
