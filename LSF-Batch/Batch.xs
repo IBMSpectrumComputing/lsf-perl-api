@@ -10397,7 +10397,8 @@ do_modify(self, sub)
           else{
 	    self->badJobId = reply.badJobId;
             self->badReqIndx = reply.badReqIndx;
-            strncpy(self->badJobName, reply.badJobName, MAX_LSB_NAME_LEN);
+            if (NULL != reply.badJobName)
+                strncpy(self->badJobName, reply.badJobName, MAX_LSB_NAME_LEN);
             STATUS_NATIVE_SET(lsberrno);
 	    SET_LSB_ERRMSG;
             RETVAL = 0;
