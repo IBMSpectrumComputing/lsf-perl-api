@@ -29,6 +29,29 @@ extern "C" {
 #define STATUS_NATIVE_SET STATUS_NATIVE_CHILD_SET
 #endif
 
+#define LSF_NSIGNAL   31
+
+#define NSIG 0
+#define SIGTRAP SIGTERM
+#define SIGIOT  SIGTERM
+#define SIGEMT  SIGTERM
+#define SIGBUS  SIGTERM
+#define SIGSYS  SIGTERM
+#define SIGIO   SIGTERM
+#define SIGXCPU SIGTERM
+#define SIGXFSZ SIGTERM
+#define SIGVTALRM SIGTERM
+#define SIGPROF SIGTERM
+#define SIGWINCH SIGTERM
+#define SIGLOST SIGTERM
+#define SIGURG  SIGTERM
+
+char *sigSym[] = {"", "HUP", "INT", "QUIT", "ILL", "TRAP", "IOT", "EMT", "FPE", "KILL", "BUS", "SEGV", "SYS", "PIPE", "ALRM", "TERM", "STOP", "TSTP", "CONT", "CHLD", "TTIN", "TTOU", "IO", "XCPU", "XFSZ", "VTALRM", "PROF", "WINCH", "LOST", "URG", "USR1", "USR2"};
+
+int signal_map[] = {0, SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGTRAP, SIGIOT, SIGEMT, SIGFPE, SIGKILL, SIGBUS, SIGSEGV, SIGSYS, SIGPIPE, SIGALRM, SIGTERM, SIGSTOP, SIGTSTP, SIGCONT, SIGCHLD, SIGTTIN, SIGTTOU, SIGIO, SIGXCPU, SIGXFSZ, SIGVTALRM, SIGPROF, SIGWINCH, SIGLOST, SIGURG, SIGUSR1, SIGUSR2};
+
+int NSIGNAL_MAP = (sizeof(signal_map)/sizeof(int));
+
 static int
 not_here(s)
 char *s;
@@ -4419,6 +4442,30 @@ int set_dependcond( struct submit *s, char *key, SV* value ){
   return 0;
 }
 
+int
+getSignalValue(char *signal)
+{
+    int i;
+    char sigStr[16];
+
+    if (signal == NULL)
+        return -1;
+    if (signal[0] == '\0')
+        return -1;
+
+    for (i = 0; i < NSIGNAL_MAP; i++) {
+        sprintf(sigStr, "%s%s", "SIG", sigSym[i]);
+        if ((strcmp(sigSym[i], signal) == 0) || (strcmp( sigStr, signal) == 0))
+            return (signal_map[i]);
+    }
+
+    if ( 0 < atoi(signal) && (atoi(signal)) <= LSF_NSIGNAL ){
+        return (atoi(signal));
+    }
+
+    return -1; 
+}
+
 int 
 gettimefortoday (char *toptarg, time_t *tTime)
 {
@@ -6503,6 +6550,7 @@ lsb_addmember(self, ob_type, identity, key_value, comments)
 	    char e[100];
 	    sprintf(e, "Unknown object type or type can't be matched");
 	    SET_LSB_ERRMSG_TO(e);
+	    return -1;
 	}
         liveReq.actions = LiC_ACTION_ADDMEMBER;
 	liveReq.identity = identity;
@@ -10641,10 +10689,19 @@ job_run(self, hosts, slots, options)
 	RETVAL
 
 int
-job_signal(self, sigValue)
-	LSF_Batch_job *self
-	int sigValue
+job_signal(self, signal)
+        LSF_Batch_job *self
+        char *signal
+    PREINIT:
+        int sigValue = 0;
     CODE:
+        if ( (sigValue = getSignalValue(signal)) <= 0){
+            char e[100];
+            printf("Signal %s is not supported. \n", signal);
+            SET_LSB_ERRMSG_TO(e);
+            return -1;
+        }
+
 	if(lsb_signaljob(LSB_JOBID(self->jobId,self->arrayIdx), sigValue)<0){
 	  STATUS_NATIVE_SET(lsberrno);
 	  SET_LSB_ERRMSG;
