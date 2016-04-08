@@ -6878,6 +6878,14 @@ rie_timeWindow(self)
 	RETVAL = self->timeWindow;
     OUTPUT:
 	RETVAL
+
+int
+rie_numRsvHosts(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->numRsvHosts;
+    OUTPUT:
+        RETVAL
 	
 void
 rie_rsvHosts(self)
@@ -6892,6 +6900,14 @@ rie_rsvHosts(self)
 	    XPUSHs(sv_2mortal(rv));
 	}
     	XSRETURN(self->numRsvHosts);
+
+int
+rie_numRsvJobs(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->numRsvJobs;
+    OUTPUT:
+        RETVAL
 
 void
 rie_jobIds(self)
@@ -6914,6 +6930,57 @@ rie_jobStatus(self)
 	    XPUSHs(sv_2mortal(newSViv(self->jobStatus[i])));
 	}
 	XSRETURN(self->numRsvJobs);
+
+char *
+rie_desc(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->desc;
+    OUTPUT:
+        RETVAL
+
+void
+rie_disabledDurations(self)
+        LSF_Batch_rsvInfoEnt *self
+    PREINIT:
+       int i;
+    CODE:
+        for (i = 0; self->disabledDurations[i]; i++) {
+            XPUSHs(sv_2mortal(newSVpv(self->disabledDurations[i], 0)));
+        }
+        XSRETURN(i);
+
+int
+rie_state(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->state;
+    OUTPUT:
+        RETVAL
+
+char *
+rie_nextInstance(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->nextInstance;
+    OUTPUT:
+        RETVAL
+
+char *
+rie_creator(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->creator;
+    OUTPUT:
+        RETVAL
+
+char *
+rie_rsvUnit(self)
+        LSF_Batch_rsvInfoEnt *self
+    CODE:
+        RETVAL = self->rsvUnit;
+    OUTPUT:
+        RETVAL
 
 MODULE = LSF::Batch	PACKAGE = LSF::Batch::hostRsvInfoEntPtr PREFIX = hrie_
 
