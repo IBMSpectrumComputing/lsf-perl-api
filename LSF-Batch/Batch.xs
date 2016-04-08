@@ -6946,7 +6946,7 @@ rie_disabledDurations(self)
         LSF_Batch_rsvInfoEnt *self
     PREINIT:
        int i;
-    CODE:
+    PPCODE:
         for (i = 0; self->disabledDurations[i]; i++) {
             XPUSHs(sv_2mortal(newSVpv(self->disabledDurations[i], 0)));
         }
