@@ -6914,9 +6914,11 @@ rie_jobIds(self)
 	LSF_Batch_rsvInfoEnt *self
     PREINIT:
 	int i;
+        char jobIdStr[256];
     PPCODE:
 	for (i = 0; i < self->numRsvJobs; i ++) {
-	    XPUSHs(sv_2mortal(newSViv(self->jobIds[i])));
+            lsb_jobid2str_r(self->jobIds[i], jobIdStr);
+            XPUSHs(sv_2mortal(newSVpv(jobIdStr, 0)));
 	}
 	XSRETURN(self->numRsvJobs);
 
