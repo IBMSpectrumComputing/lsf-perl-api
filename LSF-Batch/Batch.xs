@@ -6976,6 +6976,8 @@ rie_creator(self)
     OUTPUT:
         RETVAL
 
+#if LSF_VERSION >= LSF_XDR_VERSION9_1_3
+
 char *
 rie_rsvUnit(self)
         LSF_Batch_rsvInfoEnt *self
@@ -6983,6 +6985,8 @@ rie_rsvUnit(self)
         RETVAL = self->rsvUnit;
     OUTPUT:
         RETVAL
+
+#endif
 
 MODULE = LSF::Batch	PACKAGE = LSF::Batch::hostRsvInfoEntPtr PREFIX = hrie_
 
