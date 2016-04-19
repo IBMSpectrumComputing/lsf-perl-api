@@ -10510,6 +10510,10 @@ do_modify(self, sub)
 	  RETVAL = 0;
         }
 	else{
+           if (s->command == NULL) {
+               s->command = (char *)calloc(64, sizeof(char));
+               lsb_jobid2str_r(LSB_JOBID(self->jobId,self->arrayIdx), s->command);
+           }
 	   error = lsb_modify(s, &reply, LSB_JOBID(self->jobId,self->arrayIdx));
           if(error != -1){
 	    strncpy(self->queue, reply.queue, MAX_LSB_NAME_LEN);
@@ -10785,6 +10789,21 @@ job_signal(self, signal)
         }
     OUTPUT:
 	RETVAL
+
+int
+job_forcekill(self)
+        LSF_Batch_job *self
+    CODE:
+        if(lsb_forcekilljob(LSB_JOBID(self->jobId,self->arrayIdx))<0){
+          STATUS_NATIVE_SET(lsberrno);
+          SET_LSB_ERRMSG;
+          RETVAL = 0;
+        }
+        else{
+         RETVAL = 1;
+        }
+    OUTPUT:
+        RETVAL
 
 int 
 job_switch(self, queue)
