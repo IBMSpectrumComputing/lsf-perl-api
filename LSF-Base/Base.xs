@@ -452,7 +452,18 @@ hi_resources(self)
 	    XPUSHs(sv_2mortal(newSVpv(self->resources[i],0)));
 	}
 	XSRETURN(self->nRes);
-    
+
+void
+hi_DResources(self)
+        LSF_Base_hostInfo *self;
+    PREINIT:
+        int i;
+    PPCODE:
+        for( i = 0; i < self->nDRes; i++ ){
+            XPUSHs(sv_2mortal(newSVpv(self->DResources[i],0)));
+        }
+        XSRETURN(self->nDRes);
+
 char*
 hi_windows(self)
 	LSF_Base_hostInfo *self;
