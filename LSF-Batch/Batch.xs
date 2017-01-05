@@ -6976,7 +6976,9 @@ rie_creator(self)
     OUTPUT:
         RETVAL
 
-#if LSF_VERSION >= LSF_XDR_VERSION9_1_3
+#if LSF_PRODUCT_MAJOR_VERSION    >= 9 && \
+    LSF_PRODUCT_MINOR_VERSION    >= 1 && \
+    LSF_PRODUCT_MAINTAIN_VERSION >= 3
 
 char *
 rie_rsvUnit(self)
