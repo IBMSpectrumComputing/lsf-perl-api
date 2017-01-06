@@ -785,6 +785,50 @@ sub submit{
   }
 }
 
+sub bjobs_psum {
+  my $self = shift;
+  my %jreq;
+
+  #parse the arguments and build a hash to pass to the XS lsb_jobpendingsummary call.
+  return eval{
+  PARSE:
+    while(@_){
+      $_ = shift;
+      #print "got flag $_\n";
+      die "invalid argument $_ \n" unless /^-/;
+      if( @_ and $_[0] !~ /^-/ ){
+          $jreq{$_} = shift;
+      }
+      else{
+          $jreq{$_} = "";
+      }
+    }
+    return jobpendingsummary(\%jreq);
+  }
+}
+ 
+sub bjobs_openjobinfo_req {
+  my $self = shift;
+  my %jreq;
+
+  #parse the arguments and build a hash to pass to the XS lsb_openjobinfo_req call.
+  return eval{
+  PARSE:
+    while(@_){
+      $_ = shift;
+      #print "got flag $_\n";
+      die "invalid argument $_ \n" unless /^-/;
+      if( @_ and $_[0] !~ /^-/ ){
+          $jreq{$_} = shift;
+      }
+      else{
+          $jreq{$_} = "";
+      }
+    }
+    return openjobinfo_req(\%jreq);
+  }
+}
+ 
 sub brsvadd {
   my $self = shift;
   my %subreq;
@@ -1490,6 +1534,25 @@ Corporation's Load Sharing Facility (LSF).
 
   $batch->pendreason($numReason, \@rsTb, $jInfoH, \@loadIndex, $clusterId);
 
+  $psum_str = $batch->bjobs_psum(
+                -app             =>  "applicationName",
+                -cluster_source  =>  "sourceClusterName",
+                -description     =>  "jobDescription",
+                -group           =>  "jobGroupName",
+                -host            =>  "hostName",
+                -index_array     =>  1                       #the job array index
+                -jobid           =>  123
+                -license_project =>  "licenseProjectName",
+                -name            =>  "jobName",
+                -project         =>  "projectName",
+                -queue           =>  "queueName",
+                -reasonLevel     =>  0,                       #0-3
+                -sla             =>  "serviceClaseName",
+                -user            =>  "userName",
+
+  );
+  print $psum_str;
+
   $batch->suspreason($reasons,$subreasons,\@loadIndex);
 
   $batch->brsvadd( -n     =>  4,
@@ -1661,10 +1724,21 @@ This routine provides more information on pending, running and suspended jobs
 than openjobinfo(). Returns a pointer to jobInfoHead struct. The arguments
 are the same as ones of openjobinfo().
 
+=item $info=$batch->bjobs_openjobinfo_req(params);
+ 
+This routine provides more information than openjobinfo() and openjobinfo_a(). 
+Returns a pointer to jobInfoHeadExt struct. C<params> is a hash input parameter.
+You can refer to bjobs_psum() for the valid parameter list.
+
 =item $jobinfo = $batch->readjobinfo;
 
 This routine returns the next job information record in master batch daemon.
 
+=item $jobinfo = $batch->readjobinfo_cond(jobInfoHExt);
+ 
+This routine returns the next job information record in master batch daemon.
+The parameter C<jobInfoHExt> is the output of bjobs_openjobinfo_req().
+ 
 =item $batch->closejobinfo();
 
 This routine closes job information connection with the master batch daemon.
@@ -1749,11 +1823,21 @@ calling lsb_readjobinfo_a; C<loadIndex> can be obtained by calling
 LSF::Batch::jobInfoPtr::initLoadIndex(); C<clusterId> is one member of struct
 jobInfoEnt, and this struct can be obtained by calling readjobinfo.
 
+=item $batch->pendreason_ex(reasonLevel, jInfoE, jInfoH, clusterId);
+ 
+This one is the updated version of pendreason(). The new parameter C<reasonLevel> 
+is corresponding to bjobs -p (0-3).
+ 
 =item $batch->suspreason(reasons, subreasons, loadIndex);
 
 This routine explains why a job was suspended. C<reasons> and C<subreasons> are 
 members of struct jobInfoEnt respectively, and this struct can be obtained by 
 readjobinfo. C<loadIndex> is the same as the one of pendreason().
+ 
+=item $batch->bjobs_psum(params);
+ 
+This routine displays a summarized version of reasons for pending jobs.
+C<params> is a hash input parameter.
 
 =item $batch->brsvadd(params);
 
