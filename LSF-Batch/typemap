@@ -72,6 +72,7 @@ LSF_Batch_apsFactorInfo * T_PTROBJ_SPECIAL
 LSF_Batch_apsFactorMap * T_PTROBJ_SPECIAL
 LSF_Batch_jobExternalMsgReply * T_PTROBJ_SPECIAL
 LSF_Batch_jobInfoHead * T_PTROBJ_SPECIAL  
+LSF_Batch_jobInfoHeadExt * T_PTROBJ_SPECIAL
 LSF_Batch_rsvInfoEnt * T_PTROBJ_SPECIAL
 LSF_Batch_hostRsvInfoEnt * T_PTROBJ_SPECIAL
 LSF_Batch_pidInfo * T_PTROBJ_SPECIAL
