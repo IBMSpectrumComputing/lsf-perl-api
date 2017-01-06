@@ -6135,6 +6135,307 @@ free_rsvaddreq(struct addRsvRequest *req)
   safefree(req);
 }
 
+void add_pair2submit_ext(struct submit_ext **, int , char *);
+ 
+int format_jobinforeq(struct jobInfoReq * req, HV *hv, char * caller) {
+ 
+     int    ret    = -1;
+     int    size   = 0;
+     HE   * entry  = NULL;
+     char * key    = NULL;
+     I32    keylen = 0;
+     SV   * val    = NULL;
+     char * flag   = NULL;
+     STRLEN len    = 0;
+     char * string = NULL;
+     int    number = 0;
+     int    jobid  = 0;
+     int    jobid_arrindex = 0;
+ 
+     if ( req == NULL || hv == NULL || caller == NULL) return -1;
+ 
+     size = hv_iterinit(hv);
+ #ifdef _AIX
+     size++; /* Why the size is off by one on AIX who knows*/
+ #endif
+     while(size--){
+         entry = hv_iternext(hv);
+         key = hv_iterkey(entry, &keylen);
+         val = hv_iterval(hv,entry);
+         flag = key + 1;
+         string = strdup((char *)SvPV(val, len));
+         number = (int)SvIV(val);
+         switch (*flag) {
+             case 'a': req->app                = string; break;       
+             case 'c': req->sourceClusterName  = string; break;       
+             case 'd': req->jobDescription     = string; break;    
+             case 'g': req->jobGroupName       = string; break;  
+             case 'h': req->host               = string; break; 
+             case 'i': jobid_arrindex          = number; break; 
+             case 'j': jobid                   = number; break; 
+             case 'l': req->licenseProjectName = string; break;
+             case 'n': req->jobName            = string; break;
+             case 'p': req->projectName        = string; break;
+             case 'q': req->queue              = string; break;
+             case 'r': req->reasonLevel        = number; break;
+             case 's': req->serviceClassName   = string; break;
+             case 'u': req->userName           = string; break;
+             default : SET_LSB_ERRMSG_TO( "invalid flag" ); goto END;
+         }
+     }
+ 
+     req->options  = COND_HOSTNAME | FROM_BJOBSCMD | PEND_JOB;
+     if ( strcmp(caller, "bjobs_psum") == 0) req->options2 = PEND_REASON_SUM; 
+ 
+     if (jobid) {
+         req->jobId = LSB_JOBID(jobid, jobid_arrindex);
+         req->options |= ALL_JOB;
+     }
+ 
+ /*  add_pair2submit_ext(&req->submitExt, JDATA_EXT_AFFINITYINFO, ""); *//* no -aff  */
+ /*  add_pair2submit_ext(&req->submitExt, JDATA_EXT_DATAINFO,     ""); *//* no -data */
+ /*  add_pair2submit_ext(&req->submitExt, JDATA_EXT_EST_RESULTS,  ""); *//* no -o    */
+ 
+     ret = 0;
+ END:
+     return ret;	
+}
+ 
+void freeSubmitExt(struct submit_ext **);
+ 
+void free_jobinforeq(struct jobInfoReq * req) {
+     
+     if (req) {
+         safefree(req->userName);
+         safefree(req->jobName);
+         safefree(req->queue);
+         safefree(req->host);
+         safefree(req->app);
+         safefree(req->jobDescription);
+         safefree(req->jobGroupName);
+         safefree(req->projectName);
+         safefree(req->licenseProjectName);
+         safefree(req->serviceClassName);
+         safefree(req->sourceClusterName);
+ 
+         freeSubmitExt(&req->submitExt);
+ 
+         safefree(req);
+     }
+}
+ 
+char *rtrim(char *str) {
+         char    *end;
+         char    *trim = " \t\n\r";
+ 
+         if (!str) return NULL;
+ 
+         end = str + strlen(str);
+ 
+         while (end-- > str) {
+                 if (!strchr(trim, *end)) return str;
+ 
+                 *end = 0;
+         }
+ 
+         return str;
+}
+ 
+char *ltrim(char *str) {
+         char    *trim = " \t\n\r";
+ 
+         if (!str) return NULL;
+ 
+         while (*str) {
+                 if (!strchr(trim, *str)) return str;
+ 
+                 ++str;
+         }
+ 
+        return str;
+} 
+ 
+char *trim(char *str) {
+         return ltrim(rtrim(str));
+}
+ 
+/* -1 will be returned if the size is not enough for the content.*/
+static int getstr_jobpendingsummary(
+                       char * retstr, 
+                         int   retstr_size, 
+    struct jobPendingSummary * jobpendingsummary, 
+                         int   reasonlevel) {
+ 
+ #define UNORGANIZED_REASON            0
+ #define SINGLE_REASON                 1
+ #define CANDIDATE_REASON              2
+ #define CATEGORIZED_REASON            3
+ 
+     int ret = -1, cc = 0, sum = 0, left = retstr_size;
+     
+     int i=0, totalpendjobs=0;
+     char* enterptr = NULL;
+     char* format1 = "  %s: %d jobs\n";
+     char* format1_1 = "  %s: %d job\n";
+     char* format2 = "  %s: %d occurrences\n";
+     char* format2_1 = "  %s: %d occurrence\n";
+     char* clustername = NULL;
+     clustername = ls_getclustername();
+ 
+     for(i = 0; i<jobpendingsummary->nMainreasons; i++){
+     	totalpendjobs += (jobpendingsummary->mainreasons[i]).pendjobsnum;
+     	enterptr = strchr((jobpendingsummary->mainreasons[i]).reasonmsg, '\n');
+     	if(enterptr)
+     		*enterptr = '\0';
+     	enterptr = strchr((jobpendingsummary->mainreasons[i]).reasonmsg, ';');
+     	if(enterptr)
+     		*enterptr = '\0';
+     	trim((jobpendingsummary->mainreasons[i]).reasonmsg);
+     }
+     for(i = 0; i<jobpendingsummary->nHostreasons; i++){
+         enterptr = strchr((jobpendingsummary->hostreasons[i]).reasonmsg, '\n');
+         if(enterptr)
+             *enterptr = '\0';
+     	enterptr = strchr((jobpendingsummary->hostreasons[i]).reasonmsg, ';');
+     	if(enterptr)
+     		*enterptr = '\0';
+         trim((jobpendingsummary->hostreasons[i]).reasonmsg);
+     }
+     cc = snprintf( retstr, left, "\nSummarizing %d pending jobs in cluster (%s): \n", 
+                totalpendjobs, clustername);
+ 
+     if ( cc < 0 || cc >= left) goto LABEL_OUT;
+     left -= cc;
+     sum += cc;
+     
+     i = 0;
+ 
+     /* display main reasons */
+     while(i<jobpendingsummary->nMainreasons){
+     	if((jobpendingsummary->mainreasons[i]).pendjobsnum > 0){
+     	   if((jobpendingsummary->mainreasons[i]).pendjobsnum == 1){
+                cc = snprintf(retstr + sum, left, format1_1,
+                        (jobpendingsummary->mainreasons[i]).reasonmsg, 
+                        (jobpendingsummary->mainreasons[i]).pendjobsnum);
+                if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                left -= cc;
+                sum += cc;
+            }
+            else{
+                cc = snprintf(retstr + sum, left, format1,
+                         (jobpendingsummary->mainreasons[i]).reasonmsg, 
+                         (jobpendingsummary->mainreasons[i]).pendjobsnum);
+                if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                left -= cc;
+                sum += cc;
+            }
+     	}
+     	i++;
+     }
+ 
+     /* display host based reasons */
+     if(jobpendingsummary->nHostreasons > 0){
+     	i=0;
+         cc = snprintf(retstr + sum, left, "\nIndividual host based reasons:\n");
+         if ( cc < 0 || cc >= left) goto LABEL_OUT;
+         left -= cc;
+         sum += cc;
+         if((reasonlevel != CANDIDATE_REASON)&&(reasonlevel != CATEGORIZED_REASON)){
+             while(i<jobpendingsummary->nHostreasons){
+                 if((jobpendingsummary->hostreasons[i]).occurrence > 0){
+                     if((jobpendingsummary->hostreasons[i]).occurrence == 1){
+                         cc = snprintf(retstr + sum, left, format2_1,
+                                 (jobpendingsummary->hostreasons[i]).reasonmsg,
+                                 (jobpendingsummary->hostreasons[i]).occurrence);
+                         if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                         left -= cc;
+                         sum += cc;
+                     }
+                     else{
+                         cc = snprintf(retstr + sum, left, format2,
+                                 (jobpendingsummary->hostreasons[i]).reasonmsg,
+                                 (jobpendingsummary->hostreasons[i]).occurrence);
+                         if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                         left -= cc;
+                         sum += cc;
+                     }
+                 }
+                 i++;
+             }
+         }
+     }
+ 
+     /* display candidate host based reasons for (-p2, -p3)*/
+     if((reasonlevel == CANDIDATE_REASON)||(reasonlevel == CATEGORIZED_REASON)){
+         if(jobpendingsummary->nCandidaterns > 0){
+             i=0;
+             cc = snprintf(retstr + sum, left, " Candidate host pending reasons:\n");
+             if ( cc < 0 || cc >= left) goto LABEL_OUT;
+             left -= cc;
+             sum += cc;
+             while(i<jobpendingsummary->nCandidaterns){
+                 if((jobpendingsummary->hostreasons[i]).occurrence > 0){
+                     if((jobpendingsummary->hostreasons[i]).occurrence == 1){
+                         cc = snprintf(retstr + sum, left, format2_1,
+                                 (jobpendingsummary->candidaterns[i]).reasonmsg,
+                                 (jobpendingsummary->candidaterns[i]).occurrence);
+                         if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                         left -= cc;
+                         sum += cc;
+                     }
+                     else{
+                         cc = snprintf(retstr + sum, left, format2,
+                                 (jobpendingsummary->candidaterns[i]).reasonmsg,
+                                 (jobpendingsummary->candidaterns[i]).occurrence);
+                         if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                         left -= cc;
+                         sum += cc;
+                     }
+                 }
+                 i++;
+             }
+         }
+     }
+ 
+ 	/* display non-candidate host based reasons for (-p3) */
+     if(reasonlevel == CATEGORIZED_REASON){
+         if(jobpendingsummary->nNoncandidaterns > 0){
+             i=0;
+             cc = snprintf(retstr + sum, left, "\n Non-candidate host pending reasons:\n");
+             if ( cc < 0 || cc >= left) goto LABEL_OUT;
+             left -= cc;
+             sum += cc;
+             while(i<jobpendingsummary->nNoncandidaterns){
+                 if((jobpendingsummary->noncandidaterns[i]).occurrence > 0){
+                    if((jobpendingsummary->noncandidaterns[i]).occurrence == 1){
+                      cc = snprintf(retstr + sum, left, format2_1,
+                              (jobpendingsummary->noncandidaterns[i]).reasonmsg,
+                              (jobpendingsummary->noncandidaterns[i]).occurrence);
+                      if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                      left -= cc;
+                      sum += cc;
+                    }
+                    else{
+                      cc = snprintf(retstr + sum, left, format2,
+                              (jobpendingsummary->noncandidaterns[i]).reasonmsg,
+                              (jobpendingsummary->noncandidaterns[i]).occurrence);
+                      if ( cc < 0 || cc >= left) goto LABEL_OUT;
+                      left -= cc;
+                      sum += cc;
+                    }
+                 }
+                 i++;
+             }
+         }
+     }
+ 
+     ret = 0;
+ 
+LABEL_OUT:
+ 
+     return ret;
+}
+ 
 int                                                                               
 set_fileName(char* key, SV* value, char **fileName){ 
   STRLEN len;                                                                     
@@ -6287,6 +6588,7 @@ free_rjmreq(struct jobExternalMsgReq *req)
 }
 
 typedef struct jobInfoHead LSF_Batch_jobInfoHead;
+typedef struct jobInfoHeadExt LSF_Batch_jobInfoHeadExt;
 typedef struct myjob LSF_Batch_job;
 typedef struct submit LSF_Batch_submit;
 typedef struct jobInfoEnt LSF_Batch_jobInfo;
@@ -9597,7 +9899,36 @@ lsb_openjobinfo_a(self,job,jobName,userName,queueName,hostName,options)
 	}
    OUTPUT:
         RETVAL
-        
+
+LSF_Batch_jobInfoHeadExt *
+lsb_openjobinfo_req(hvreq)
+       HV * hvreq
+ PREINIT:
+     struct jobInfoReq     * jreq    = NULL;
+     struct jobInfoHeadExt * ret     = NULL;
+ CODE:
+     jreq = (struct jobInfoReq *)safemalloc(sizeof(struct jobInfoReq));
+     bzero(jreq, sizeof(struct jobInfoReq));
+ 
+     if (format_jobinforeq(jreq, hvreq, "lsb_openjobinfo_req") < 0) {
+         free_jobinforeq(jreq);
+         SET_LSB_ERRMSG;
+         XSRETURN_EMPTY;	
+     }
+ 
+     ret = lsb_openjobinfo_req(jreq);
+     if (ret == NULL) {
+         free_jobinforeq(jreq);
+         STATUS_NATIVE_SET(lsberrno);
+         SET_LSB_ERRMSG;
+         XSRETURN_EMPTY;	
+     }
+     
+     free_jobinforeq(jreq);
+     RETVAL = ret;
+ OUTPUT:
+     RETVAL
+     
 LSF_Batch_jobInfo *
 lsb_readjobinfo(self)
 	void *self;
@@ -9612,13 +9943,38 @@ lsb_readjobinfo(self)
 	}
     OUTPUT:
 	RETVAL
-
+	
+LSF_Batch_jobInfo *
+lsb_readjobinfo_cond(self, jInfoHExt)
+     void                     * self;
+     LSF_Batch_jobInfoHeadExt * jInfoHExt;
+ PREINIT:
+     int more = 0;
+ CODE:
+     RETVAL = lsb_readjobinfo_cond(&more, jInfoHExt);
+     if(RETVAL == NULL){
+	   STATUS_NATIVE_SET(lsberrno);
+ 	   SET_LSB_ERRMSG;
+           XSRETURN_UNDEF;
+     }
+ OUTPUT:
+     RETVAL
 
 void
 lsb_closejobinfo(self)
 	void *self;
     CODE:
 	lsb_closejobinfo();
+
+MODULE = LSF::Batch	PACKAGE = LSF::Batch::jobInfoHeadExtPtr	PREFIX = head_
+ 
+LSF_Batch_jobInfoHead *
+head_jobInfoHead(self)
+    LSF_Batch_jobInfoHeadExt * self
+CODE:
+    RETVAL = self->jobInfoHead;
+OUTPUT:
+    RETVAL
 
 
 MODULE = LSF::Batch     PACKAGE = LSF::Batch::jobInfoHeadPtr    PREFIX = head_
@@ -10892,6 +11248,60 @@ lsb_pendreason(self,numReason,rsTb,jInfoH,loadIndex,clusterId)
     OUTPUT:
         RETVAL
 
+char *
+lsb_pendreason_ex(self, reasonLevel, jInfoE, jInfoH, clusterId)
+	void                  * self
+        int                     reasonLevel
+        LSF_Batch_jobInfo     * jInfoE
+ 	LSF_Batch_jobInfoHead * jInfoH
+ 	int                     clusterId
+ CODE:
+     RETVAL = lsb_pendreason_ex(reasonLevel, jInfoE, jInfoH, clusterId);
+ OUTPUT:
+     RETVAL
+ 
+char *
+lsb_jobpendingsummary(hvreq)
+       HV * hvreq
+ PREINIT:
+     struct jobInfoReq        * jreq    = NULL;
+     struct jobPendingSummary * summary = NULL;
+     char                     * retstr  = NULL;
+ CODE:
+     jreq = (struct jobInfoReq *)safemalloc(sizeof(struct jobInfoReq));
+     bzero(jreq, sizeof(struct jobInfoReq));
+ #define RETSTR_SIZE 4096
+     retstr = (char *)safemalloc(RETSTR_SIZE * sizeof(char));
+     bzero(retstr, sizeof(RETSTR_SIZE * sizeof(char)));
+ 
+     if (format_jobinforeq(jreq, hvreq, "bjobs_psum") < 0) {
+         free_jobinforeq(jreq);
+         safefree(retstr);
+         SET_LSB_ERRMSG;
+         XSRETURN_EMPTY;	
+     }
+ 
+     summary = lsb_jobpendingsummary(jreq);
+     if (summary == NULL) {
+         free_jobinforeq(jreq);
+         safefree(retstr);
+         STATUS_NATIVE_SET(lsberrno);
+         SET_LSB_ERRMSG;
+         XSRETURN_EMPTY;	
+     }
+     
+     if ( getstr_jobpendingsummary(retstr, RETSTR_SIZE, summary, jreq->reasonLevel) < 0) {
+         free_jobinforeq(jreq);
+         safefree(retstr);
+         SET_LSB_ERRMSG;
+         XSRETURN_EMPTY;	
+     }
+ 
+     free_jobinforeq(jreq);
+     RETVAL = retstr;
+ OUTPUT:
+     RETVAL
+ 
 void
 lsb_sharedresourceinfo(self, resources, hostName, option)
 	void *self	
