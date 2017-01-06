@@ -626,3 +626,53 @@ if(!$ok25){
 }
 print "\n";
 
+#*****************************************************
+$ok26 =1;
+ 
+$jobid = undef;
+$reasonLevel = 3;
+$jInfoHExt = $b->bjobs_openjobinfo_req( 
+                            -jobid => $jobid,
+                            -reasonLevel => $reasonLevel
+                        );
+$j = $b->readjobinfo_cond($jInfoHExt);
+$clusterId = $j->clusterId;
+$pedmsgex = $b->pendreason_ex($reasonLevel, $j, $jInfoHExt->jobInfoHead, $clusterId) or $ok26=0;
+#print "pendmsgex = $pedmsgex \n";
+
+$b->closejobinfo;
+if(!$ok26){
+    print "not ";
+}
+print "ok 26     ";
+
+if(!$ok26){
+    #$msg = $b ->sysmsg();
+    #print "$msg \n";
+    print "$@";
+}
+
+print "\n";
+##*****************************************************
+# NOTE: bjobs_psum() can not work with bjobs_openjobinfo_req(), openjobinfo() 
+#       and openjobinfo_a() due to a known issue in LSF 10.1. To fix the issue 
+#       by updating the library to LSF 10.1.0.2 or later version.
+#
+#$ok27 =1;
+#
+#$pedmsg = $b->bjobs_psum() or $ok27=0;
+#print $pedmsg;
+#
+#if(!$ok27){
+#    print "not ";
+#}
+#print "ok 27     ";
+#
+#if(!$ok27){
+#    #$msg = $b ->sysmsg();
+#    #print "$msg \n";
+#    print "$@";
+#}
+#
+#print "\n";
+ 
