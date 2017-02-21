@@ -46,6 +46,8 @@ extern "C" {
 #define SIGLOST SIGTERM
 #define SIGURG  SIGTERM
 
+#define RETSTR_SIZE 4096
+
 char *sigSym[] = {"", "HUP", "INT", "QUIT", "ILL", "TRAP", "IOT", "EMT", "FPE", "KILL", "BUS", "SEGV", "SYS", "PIPE", "ALRM", "TERM", "STOP", "TSTP", "CONT", "CHLD", "TTIN", "TTOU", "IO", "XCPU", "XFSZ", "VTALRM", "PROF", "WINCH", "LOST", "URG", "USR1", "USR2"};
 
 int signal_map[] = {0, SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGTRAP, SIGIOT, SIGEMT, SIGFPE, SIGKILL, SIGBUS, SIGSEGV, SIGSYS, SIGPIPE, SIGALRM, SIGTERM, SIGSTOP, SIGTSTP, SIGCONT, SIGCHLD, SIGTTIN, SIGTTOU, SIGIO, SIGXCPU, SIGXFSZ, SIGVTALRM, SIGPROF, SIGWINCH, SIGLOST, SIGURG, SIGUSR1, SIGUSR2};
@@ -11270,7 +11272,6 @@ lsb_jobpendingsummary(hvreq)
  CODE:
      jreq = (struct jobInfoReq *)safemalloc(sizeof(struct jobInfoReq));
      bzero(jreq, sizeof(struct jobInfoReq));
- #define RETSTR_SIZE 4096
      retstr = (char *)safemalloc(RETSTR_SIZE * sizeof(char));
      bzero(retstr, sizeof(RETSTR_SIZE * sizeof(char)));
  
