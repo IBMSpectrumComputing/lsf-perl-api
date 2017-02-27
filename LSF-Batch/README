@@ -1,8 +1,8 @@
 Readme file for: LSF
 Product/Component Release: 10.1
-Version: 1.02
+Version: 1.03
 Publication date: 21 October 2013
-Last modified: 6 January 2017
+Last modified: 27 Feburary 2017
 
 Access IBM Platform Computing's LSF Batch API from Perl.
 
@@ -86,6 +86,9 @@ Version History
         - $batch->pendreason_ex()
         - $batch->bjobs_psum()
   Tested with LSF 10.1 on Linux 2.6.
+
+- Version 1.03 27/2/2017
+  Fixed a compilation error
 
 ==========================
 Community Contribution
