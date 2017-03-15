@@ -11603,6 +11603,7 @@ er_eventLog(self)
 	      sv_setref_iv(rv, label, (IV)&self->eventLog.jobNewLog);
 	      break;
 	   case EVENT_JOB_MODIFY:
+	   case EVENT_JOB_MODIFY2:
 	      label = "LSF::Batch::jobModLogPtr";
 	      rv = newRV_inc(&PL_sv_undef);
 	      sv_setref_iv(rv, label, (IV)&self->eventLog.jobModLog);
