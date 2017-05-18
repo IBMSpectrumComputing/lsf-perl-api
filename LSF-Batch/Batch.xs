@@ -10141,6 +10141,38 @@ ji_maxMem(self)
     OUTPUT:
 	RETVAL
 
+char *
+ji_appResReq(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->appResReq;
+    OUTPUT:
+	RETVAL
+
+char *
+ji_qResReq(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->qResReq;
+    OUTPUT:
+	RETVAL
+
+char *
+ji_combinedResReq(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->combinedResReq;
+    OUTPUT:
+	RETVAL
+
+char *
+ji_effectiveResReq(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->effectiveResReq;
+    OUTPUT:
+	RETVAL
+
 #endif
 
 int
@@ -10642,6 +10674,14 @@ sub_resReq(self)
 	LSF_Batch_submit *self
     CODE:
 	RETVAL = self->resReq;
+    OUTPUT:
+	RETVAL
+
+char *
+sub_app(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->app;
     OUTPUT:
 	RETVAL
 

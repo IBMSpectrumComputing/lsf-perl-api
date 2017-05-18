@@ -1,10 +1,10 @@
 Readme file for: LSF
 Product/Component Release: 10.1
-Version: 1.04
+Version: 1.05
 Publication date: 21 October 2013
-Last modified: 15 March 2017
+Last modified: 22 May 2017
 
-Access IBM Platform Computing's LSF Batch API from Perl.
+Access IBM Spectrum LSF APIs from Perl.
 
 
 ==========================
@@ -25,10 +25,10 @@ Overview
 This library allows you to call the LSF APIs from Perl. The wrapper is created
 by using xsubpp.
 
-This is an IBM Platform Computing fork of the original LSF-Batch-0.06 
+This is an IBM Spectrum Computing fork of the original LSF-Batch-0.06 APIs,
 which can be found at http://search.cpan.org/~lsfisv/.
 
-IBM Platform Computing will provide formal support for this software 
+IBM Spectrum Computing provides formal support for this software 
 to entitled clients via the normal IBM support channels.
 
 
@@ -39,7 +39,7 @@ Installation
 Before compiling the library, set LSF environment variables.
 
 To compile and install the library, go to the source directory
-and type:
+and run the following commands:
 
   $ perl Makefile.PL
   $ make
@@ -93,6 +93,16 @@ Version History
 - Version 1.04 15/3/2017
   Fixed a bug, cannot read EVENT_JOB_MODIFY2
 
+- Version 1.05 18/5/2017
+  Added the following 4 fields in LSF_Batch_jobInfo :
+        - appResReq
+        - qResReq
+        - combinedResReq
+        - effectiveResReq
+
+  Added the following 1 field in LSF_Batch_submit :
+        - app
+
 ==========================
 Community Contribution
 ==========================
@@ -118,7 +128,7 @@ Developer's Certificate of Origin (DCO) process:
 Copyright
 =========================
 
-(C) Copyright IBM Corporation 2016
+(C) Copyright IBM Corporation 2017
 
 U.S. Government Users Restricted Rights - Use, duplication or disclosure 
 restricted by GSA ADP Schedule Contract with IBM Corp.
