@@ -95,8 +95,8 @@ Version History
 
 - Version 1.05 18/5/2017
   Added the following 4 fields in LSF_Batch_jobInfo :
-        - appResReq
-        - qResReq
+        - appResReq (BJOBS_RES_REQ_DISPLAY=full should be configured in lsb.params)
+        - qResReq   (BJOBS_RES_REQ_DISPLAY=full should be configured in lsb.params)
         - combinedResReq
         - effectiveResReq
 
