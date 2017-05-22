@@ -43,7 +43,7 @@ if($ok2){
 print "not " unless $ok2;
 print "ok 2\n";
 
-#********************************************
+********************************************
 $ok3 = 1;
 
 @user = ( );   
@@ -676,3 +676,32 @@ print "\n";
 #
 #print "\n";
  
+#***************************************************
+$ok28 = 1;
+$jobid = undef;
+defined($jobid) or warn "no job Id is given.               \t";
+$job = new LSF::Batch::jobPtr ($jobid, 0);
+$rec = $b->openjobinfo($job,undef,undef,undef,undef,1);
+$j = $b->readjobinfo;
+
+$resreq  = $j->submit->resReq;
+$aresreq = $j->appResReq;
+$qresreq = $j->qResReq;
+$cresreq = $j->combinedResReq;
+$eresreq = $j->effectiveResReq;
+$app     = $j->submit->app; 
+
+print "job $jobid, resReq          = $resreq \n";
+print "job $jobid, appResReq       = $aresreq \n";
+print "job $jobid, qResReq         = $qresreq \n";
+print "job $jobid, combinedResReq  = $cresreq \n";
+print "job $jobid, effectiveResReq = $eresreq \n";
+print "job $jobid, app             = $app \n";
+
+print "not " unless $ok28;
+print "ok 28     ";
+if (!$ok28) {
+    print $base->sysmsg;
+}
+print "\n";
+
