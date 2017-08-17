@@ -41,8 +41,8 @@ To compile and install the library, go to the source directory and type:
 ## Release Notes
 
 ### Release 1.01 - 27/11/2013:
-  IBM Platform Computing refreshed LSF-Base-0.07 and provides formal support.
-  Tested with LSF 9.1.2 on Linux 2.6.
+  * IBM Platform Computing refreshed LSF-Base-0.07 and provides formal support.
+  * Tested with LSF 9.1.2 on Linux 2.6.
 
 ### Release 0.07 - 6/13/2008:
   * Exported the element nRes in LSF::Base::lsInfoPtr.
