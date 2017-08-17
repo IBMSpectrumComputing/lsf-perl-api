@@ -56,7 +56,7 @@ To compile and install the library, go to the source directory and run the follo
 ### Release 1.03 - 27/2/2017
   * Fixed a compilation error
 
-### Release 1.02 - 6/1/2017:
+### Release 1.02 - 6/1/2017
   * Added the following 4 LSF::Batch APIs :
     - $batch->bjobs_openjobinfo_req()
     - $batch->readjobinfo_cond()
@@ -64,30 +64,30 @@ To compile and install the library, go to the source directory and run the follo
     - $batch->bjobs_psum()
   * Tested with LSF 10.1 on Linux 2.6.
 
-### Release 1.01 - 27/11/2013:
+### Release 1.01 - 27/11/2013
   * IBM Platform Computing refreshed LSF-Batch-0.06 and provides formal support.
   * Tested with LSF 9.1.2 on Linux 2.6.
 
-### Release 0.06 - 6/13/2008:
+### Release 0.06 - 6/13/2008
   * Added 10 new APIs. These APIs were tested in test.pl on linux2.6 and Solaris 10(X86_64) by Perl 5.8.0. Added test_launch.pl to test two special APIs: lsb_gethostlist and lsb_launch.
   * test.pl can be used as normal. test_launch.pl is used in test.pl.
   * Added the document for the APIs, which can be viewed with perldoc.
 
-### Release 0.05 - 4/29/2008:
+### Release 0.05 - 4/29/2008
   * Based on Version 0.05, some enhancements for APIs were added to support 
   * LSF 7.0 Update 2. All the APIs have been tested in test.pl on Linux 2.6 and Solaris 10(X86_64) by Perl 5.8.0.
 
-### Release 0.04 - 4/13/2001:
+### Release 0.04 - 4/13/2001
   * General improvements. Added support for lsb_geteventrec. 
   * Added a script to help generate XS code from LSF include files (makexs.pl)
 
-### Release 0.03 - 6/01/2000:
+### Release 0.03 - 6/01/2000
   * Library works on Solaris. Several bugs were fixed.
 
-### Release 0.02 - 4/05/2000:
+### Release 0.02 - 4/05/2000
   * Added README to the MANIFEST.
 
-### Release 0.01 - 4/04/2000:
+### Release 0.01 - 4/04/2000
   * First public release. Some functions were not totally debugged and not completely tested.
 
 ## Community Contribution Requirements
