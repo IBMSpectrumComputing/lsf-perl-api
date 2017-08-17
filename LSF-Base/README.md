@@ -14,8 +14,8 @@ The LSF Base API allows for querying of host information including load, model a
  
 * Overview
 * Installation
-* Version History
-* Community Contribution
+* Release Notes
+* Community Contribution Requirements
 * Copyright
 
 ## Overview
@@ -66,7 +66,7 @@ To compile and install the library, go to the source directory and type:
 
 ## Community Contribution Requirements
 
-Community contributions to this branch must follow the IBM Developer's Certificate of Origin (DCO) process:
+Community contributions to this repository must follow the [IBM Developer's Certificate of Origin (DCO)](https://github.com/IBMSpectrumComputing/perlLSF/blob/master/IBMDCO.md) process and only through GitHub Pull Requests:
 
  1. Contributor proposes new code to community.
 
@@ -75,11 +75,12 @@ Community contributions to this branch must follow the IBM Developer's Certifica
     originator or has rights to publish. The template of the DCO is included in
     this package).
  
- 3. LSF Development reviews contribution to check for:
+ 3. IBM Spectrum LSF development reviews contribution to check for:
     i)  Applicability and relevancy of functional content 
     ii) Any obvious issues
 
- 4. If accepted, posts contribution. If rejected, work goes back to contributor and is not posted.
+ 4. If accepted, posts contribution. If rejected, work goes back to contributor and is not merged.
+
 
 ## Copyright
 
