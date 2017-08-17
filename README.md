@@ -1,28 +1,14 @@
 # perlAPI
 
-This perl module allow customers to submit and control jobs and obtain status of queues, hosts and other LSF attributes from within perl directly.  They work with various versions of LSF and are maintained by LSF developement, though we take contributions from the Open Source community.
+These perl modules allow customers to submit and control jobs and obtain status of queues, hosts and other LSF attributes from within perl directly.  They work with various versions of LSF and are maintained by LSF developement, though we take contributions from the Open Source community.
 
 If you plan or would like to contribute to the library, you must follow the DCO process in the attached [DCO Readme file](https://github.com/IBMSpectrumComputing/platform-python-lsf-api/blob/master/IBMDCO.md) in the root of this repository.  It essentially requires you to provide a Sign Off line in the notes of your pull request stating that the work is clear of infinging work by others.  Again, for more details, please see the DCO Readme file.
 
 ## Release Information
 
-* IBM Spectrum LSF Perl Module
-* Supporting LSF Release: 10.1
-* Module Version: XXX
-* Publication date: XXX
-* Last modified: XXX
+Each of the LSF-Base and LSF-Batch repositories include their own separate release information.  Please see those repositories README.md files for more information
 
-## Contents
-
-* Introduction
-* Installation
-* Release Notes
-* Community Contribution
-* Copyright
- 
-## Introduction
-
-This library allows you to call the LSF APIs directly through perl.  [You can find more information and usage notes here](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/New%20IBM%20Platform%20LSF%20Wiki/page/Integrations%2C%20APIs%2C%20and%20samples). 
+This perl modules allow you to call the LSF APIs directly through perl.  [You can find more information and usage notes here](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/New%20IBM%20Platform%20LSF%20Wiki/page/Integrations%2C%20APIs%2C%20and%20samples). 
 
 You are encouraged to contribute your own perl module enhancements to the Open Source LSF APIs for perl, and you may find some examples in [IBM Platform LSF Wiki](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/New%20IBM%20Platform%20LSF%20Wiki/page/Using%20the%20Python%20wrapper%20for%20LSF%20API).
 
@@ -34,12 +20,8 @@ Please note you must use lsf.lsb_init before any other LSBLIB library routine in
 
 ## Installation
 
-TD Announced
+Please follow the README.md files in each of the repository sections.
 
-## Release Notes
-
-### Release XXX
- 
 ## Community Contribution Requirements
 
 Community contributions to this repository must follow the [IBM Developer's Certificate of Origin (DCO)](https://github.com/IBMSpectrumComputing/platform-python-lsf-api/blob/master/IBMDCO.md) process and only through GitHub Pull Requests:
