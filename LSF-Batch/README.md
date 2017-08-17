@@ -90,6 +90,8 @@ To compile and install the library, go to the source directory and run the follo
 ### Release 0.01 - 4/04/2000:
   * First public release. Some functions were not totally debugged and not completely tested.
 
+## Community Contribution Requirements
+
 Community contributions to this repository must follow the [IBM Developer's Certificate of Origin (DCO)](https://github.com/IBMSpectrumComputing/perlAPI/blob/master/LSF-Batch/IBMDCO.md) process and only through GitHub Pull Requests:
 
  1. Contributor proposes new code to community.
