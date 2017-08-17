@@ -66,7 +66,7 @@ To compile and install the library, go to the source directory and type:
 
 ## Community Contribution Requirements
 
-Community contributions to this repository must follow the [IBM Developer's Certificate of Origin (DCO)](https://github.com/IBMSpectrumComputing/perlLSF/blob/master/IBMDCO.md) process and only through GitHub Pull Requests:
+Community contributions to this repository must follow the [IBM Developer's Certificate of Origin (DCO)](https://github.com/IBMSpectrumComputing/perlAPI/blob/master/LSF-Base/IBMDCO.md) process and only through GitHub Pull Requests:
 
  1. Contributor proposes new code to community.
 
