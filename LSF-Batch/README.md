@@ -1,6 +1,6 @@
 # LSF-Batch
 
-The LSF Base API allows for querying of host information including load, model and type, the number of Core, Cpu's, memory etc.  You can also launch remote tasks using LSF Baes task launching mechanisms from one architecture or operating system to the next.  This remote execution engine allows the launch of remote process to be executed on the correct hardware based upon LSF resource requirements.
+The LSF Batch API allows for controling, submitting, and querying of jobs, queues, host sand other LSF information directly through Perl.
 
 ## Release Information
 
