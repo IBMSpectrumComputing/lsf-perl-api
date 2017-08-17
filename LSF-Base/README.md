@@ -40,32 +40,29 @@ To compile and install the library, go to the source directory and type:
 
 ## Release Notes
 
-### Release 1.01 27/11/2013:
+### Release 1.01 - 27/11/2013:
   IBM Platform Computing refreshed LSF-Base-0.07 and provides formal support.
   Tested with LSF 9.1.2 on Linux 2.6.
 
-### Release 0.07 6/13/2008:
-  Exported the element nRes in LSF::Base::lsInfoPtr.
-  Added the document for the APIs, which can be viewed with perldoc.
+### Release 0.07 - 6/13/2008:
+  * Exported the element nRes in LSF::Base::lsInfoPtr.
+  * Added the document for the APIs, which can be viewed with perldoc.
 
-### Release 0.06 4/29/2008:
-  Based on Version 0.05, some enhancements for APIs were added to support 
-  LSF 7.0 Update 2. All the APIs have been tested in test.pl on Linux 2.6
-  and Solaris 10(X86_64) by Perl 5.8.0.
+### Release 0.06 - 4/29/2008:
+  * Based on Version 0.05, some enhancements for APIs were added to support 
+  * LSF 7.0 Update 2. All the APIs have been tested in test.pl on Linux 2.6 and Solaris 10(X86_64) by Perl 5.8.0.
 
-### Release 0.05 3/29/2001:
-  Fixed a problem with version 0.04.
+### Release 0.05 - 3/29/2001:
+  * Fixed a problem with version 0.04.
 
-### Release 0.04 3/28/2001
-  Updated for LSF 4.0/4.1. Added support for other operating systems. Works 
-  with Compaq Alpha, Linux, AIX and Solaris. 
+### Release 0.04 - 3/28/2001
+  * Updated for LSF 4.0/4.1. Added support for other operating systems. Works with Compaq Alpha, Linux, AIX and Solaris. 
 
-### Release 0.03 6/01/2000:
-  Synced version with LSF::Batch. Added new Makefile.PL. Fixed bugs.
+### Release 0.03 - 6/01/2000:
+  * Synced version with LSF::Batch. Added new Makefile.PL. Fixed bugs.
 
-### Release 0.01 12/21/1999:
-  First public release. Some functions were not totally debugged and not
-  completely tested.
+### Release 0.01 - 12/21/1999:
+  * First public release. Some functions were not totally debugged and not completely tested.
 
 ## Community Contribution Requirements
 
