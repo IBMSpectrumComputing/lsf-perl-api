@@ -6179,7 +6179,11 @@ int format_jobinforeq(struct jobInfoReq * req, HV *hv, char * caller) {
              case 'n': req->jobName            = string; break;
              case 'p': req->projectName        = string; break;
              case 'q': req->queue              = string; break;
+
+/* LSF 10.1 or above*/
+#if LSF_VERSION >= 34
              case 'r': req->reasonLevel        = number; break;
+#endif
              case 's': req->serviceClassName   = string; break;
              case 'u': req->userName           = string; break;
              default : SET_LSB_ERRMSG_TO( "invalid flag" ); goto END;
@@ -6187,7 +6191,10 @@ int format_jobinforeq(struct jobInfoReq * req, HV *hv, char * caller) {
      }
  
      req->options  = COND_HOSTNAME | FROM_BJOBSCMD | PEND_JOB;
+
+#if LSF_VERSION >= 34
      if ( strcmp(caller, "bjobs_psum") == 0) req->options2 = PEND_REASON_SUM; 
+#endif
  
      if (jobid) {
          req->jobId = LSB_JOBID(jobid, jobid_arrindex);
@@ -6261,6 +6268,8 @@ char *trim(char *str) {
          return ltrim(rtrim(str));
 }
  
+#if LSF_VERSION >= 34
+
 /* -1 will be returned if the size is not enough for the content.*/
 static int getstr_jobpendingsummary(
                        char * retstr, 
@@ -6437,6 +6446,8 @@ LABEL_OUT:
  
      return ret;
 }
+
+#endif
  
 int                                                                               
 set_fileName(char* key, SV* value, char **fileName){ 
@@ -11292,6 +11303,9 @@ lsb_pendreason(self,numReason,rsTb,jInfoH,loadIndex,clusterId)
     OUTPUT:
         RETVAL
 
+
+#if LSF_VERSION >= 34
+
 char *
 lsb_pendreason_ex(self, reasonLevel, jInfoE, jInfoH, clusterId)
 	void                  * self
@@ -11344,6 +11358,8 @@ lsb_jobpendingsummary(hvreq)
      RETVAL = retstr;
  OUTPUT:
      RETVAL
+
+#endif
  
 void
 lsb_sharedresourceinfo(self, resources, hostName, option)
