@@ -11648,6 +11648,11 @@ er_eventLog(self)
 	      rv = newRV_inc(&PL_sv_undef);
 	      sv_setref_iv(rv, label, (IV)&self->eventLog.jgrpNewLog);
 	      break;
+	   case EVENT_JGRP_MOD:
+	      label = "LSF::Batch::jgrpNewLogPtr";
+	      rv = newRV_inc(&PL_sv_undef);
+	      sv_setref_iv(rv, label, (IV)&self->eventLog.jgrpNewLog);
+	      break;
 	   case EVENT_JGRP_CTRL:
 	      label = "LSF::Batch::jgrpCtrlLogPtr";
 	      rv = newRV_inc(&PL_sv_undef);
