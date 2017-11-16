@@ -6677,6 +6677,9 @@ typedef struct apsLongNameMap LSF_Batch_apsLongNameMap;
 typedef struct rsvInfoEnt LSF_Batch_rsvInfoEnt;
 typedef struct hostRsvInfoEnt LSF_Batch_hostRsvInfoEnt;
 typedef struct pidInfo LSF_Batch_pidInfo;
+typedef struct jobResizeReleaseLog LSF_Batch_jobResizeReleaseLog;
+typedef struct jobResizeCancelLog  LSF_Batch_jobResizeCancelLog;
+
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::xFilePtr PREFIX = xf_
 
@@ -11632,7 +11635,7 @@ er_eventLog(self)
 	LSF_Batch_eventRec *self
     PREINIT:
 	char *label;
-	SV *rv;
+	SV *rv = NULL;
     PPCODE:
 	switch(self->type){
 	   case EVENT_LOG_SWITCH:
@@ -11886,10 +11889,20 @@ er_eventLog(self)
 	      rv = newRV_inc(&PL_sv_undef);
 	      sv_setref_iv(rv, label, (IV)&self->eventLog.perfmonLog);
 	      break;
+	   case EVENT_JOB_RESIZE_RELEASE:
+	      label = "LSF::Batch::jobResizeReleaseLogPtr";
+	      rv = newRV_inc(&PL_sv_undef);
+	      sv_setref_iv(rv, label, (IV)&self->eventLog.jobResizeReleaseLog);
+	      break;
+	   case EVENT_JOB_RESIZE_CANCEL:
+	      label = "LSF::Batch::jobResizeCancelLogPtr";
+	      rv = newRV_inc(&PL_sv_undef);
+	      sv_setref_iv(rv, label, (IV)&self->eventLog.jobResizeCancelLog);
+	      break;
 	   default:
 	      break;
 	}
-	XPUSHs(sv_2mortal(rv));
+	if (rv) XPUSHs(sv_2mortal(rv));
 	XSRETURN(1);
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::logSwitchLogPtr PREFIX = lsl_
@@ -15681,3 +15694,152 @@ pi_jobid(self)
     	RETVAL = self->jobid;
     OUTPUT:
     	RETVAL
+
+
+MODULE = LSF::Batch PACKAGE = LSF::Batch::jobResizeReleaseLogPtr PREFIX = jrszrlease_
+
+int
+jrszrlease_jobid(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->jobId;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_idx(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->idx;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_reqid(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->reqId;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_options(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->options;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_userid(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->userId;
+    OUTPUT:
+    	RETVAL
+
+char *
+jrszrlease_username(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->userName;
+    OUTPUT:
+    	RETVAL
+
+char *
+jrszrlease_resizenotifycmd(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->resizeNotifyCmd;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_numresizehosts(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->numResizeHosts;
+    OUTPUT:
+    	RETVAL
+
+void
+jrszrlease_resizehosts(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    PREINIT:
+	int i;
+    PPCODE:
+	for( i = 0; i < self->numResizeHosts; i++)
+          XPUSHs(sv_2mortal(newSVpv(self->resizeHosts[i],0)));	
+	XSRETURN(self->numResizeHosts);
+
+int
+jrszrlease_nextstatusno(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->nextStatusNo;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszrlease_numresizehosts4slots(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    CODE:
+    	RETVAL = self->numResizeHosts4Slots;
+    OUTPUT:
+    	RETVAL
+
+void
+jrszrlease_resizehosts4slots(self)
+	LSF_Batch_jobResizeReleaseLog *self
+    PREINIT:
+	int i;
+    PPCODE:
+	for( i = 0; i < self->numResizeHosts4Slots; i++)
+          XPUSHs(sv_2mortal(newSVpv(self->resizeHosts4Slots[i],0)));	
+	XSRETURN(self->numResizeHosts4Slots);
+
+
+MODULE = LSF::Batch PACKAGE = LSF::Batch::jobResizeCancelLogPtr PREFIX = jrszcancel_
+
+int
+jrszcancel_jobid(self)
+	LSF_Batch_jobResizeCancelLog *self
+    CODE:
+    	RETVAL = self->jobId;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszcancel_idx(self)
+	LSF_Batch_jobResizeCancelLog *self
+    CODE:
+    	RETVAL = self->idx;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszcancel_userid(self)
+	LSF_Batch_jobResizeCancelLog *self
+    CODE:
+    	RETVAL = self->userId;
+    OUTPUT:
+    	RETVAL
+
+char *
+jrszcancel_username(self)
+	LSF_Batch_jobResizeCancelLog *self
+    CODE:
+    	RETVAL = self->userName;
+    OUTPUT:
+    	RETVAL
+
+int
+jrszcancel_nextstatusno(self)
+	LSF_Batch_jobResizeCancelLog *self
+    CODE:
+    	RETVAL = self->nextStatusNo;
+    OUTPUT:
+    	RETVAL
+
+
+
