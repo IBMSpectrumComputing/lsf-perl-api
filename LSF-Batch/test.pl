@@ -627,32 +627,32 @@ if(!$ok25){
 print "\n";
 
 #*****************************************************
-$ok26 =1;
- 
-$jobid = undef;
-$reasonLevel = 3;
-$jInfoHExt = $b->bjobs_openjobinfo_req( 
-                            -jobid => $jobid,
-                            -reasonLevel => $reasonLevel
-                        );
-$j = $b->readjobinfo_cond($jInfoHExt);
-$clusterId = $j->clusterId;
-$pedmsgex = $b->pendreason_ex($reasonLevel, $j, $jInfoHExt->jobInfoHead, $clusterId) or $ok26=0;
-#print "pendmsgex = $pedmsgex \n";
-
-$b->closejobinfo;
-if(!$ok26){
-    print "not ";
-}
-print "ok 26     ";
-
-if(!$ok26){
-    #$msg = $b ->sysmsg();
-    #print "$msg \n";
-    print "$@";
-}
-
-print "\n";
+#$ok26 =1;
+# 
+#$jobid = undef;
+#$reasonLevel = 3;
+#$jInfoHExt = $b->bjobs_openjobinfo_req( 
+#                            -jobid => $jobid,
+#                            -reasonLevel => $reasonLevel
+#                        );
+#$j = $b->readjobinfo_cond($jInfoHExt);
+#$clusterId = $j->clusterId;
+#$pedmsgex = $b->pendreason_ex($reasonLevel, $j, $jInfoHExt->jobInfoHead, $clusterId) or $ok26=0;
+##print "pendmsgex = $pedmsgex \n";
+#
+#$b->closejobinfo;
+#if(!$ok26){
+#    print "not ";
+#}
+#print "ok 26     ";
+#
+#if(!$ok26){
+#    #$msg = $b ->sysmsg();
+#    #print "$msg \n";
+#    print "$@";
+#}
+#
+#print "\n";
 ##*****************************************************
 # NOTE: bjobs_psum() can not work with bjobs_openjobinfo_req(), openjobinfo() 
 #       and openjobinfo_a() due to a known issue in LSF 10.1. To fix the issue 
@@ -677,31 +677,31 @@ print "\n";
 #print "\n";
  
 #***************************************************
-$ok28 = 1;
-$jobid = undef;
-defined($jobid) or warn "no job Id is given.               \t";
-$job = new LSF::Batch::jobPtr ($jobid, 0);
-$rec = $b->openjobinfo($job,undef,undef,undef,undef,1);
-$j = $b->readjobinfo;
-
-$resreq  = $j->submit->resReq;
-$aresreq = $j->appResReq;
-$qresreq = $j->qResReq;
-$cresreq = $j->combinedResReq;
-$eresreq = $j->effectiveResReq;
-$app     = $j->submit->app; 
-
-print "job $jobid, resReq          = $resreq \n";
-print "job $jobid, appResReq       = $aresreq \n";
-print "job $jobid, qResReq         = $qresreq \n";
-print "job $jobid, combinedResReq  = $cresreq \n";
-print "job $jobid, effectiveResReq = $eresreq \n";
-print "job $jobid, app             = $app \n";
-
-print "not " unless $ok28;
-print "ok 28     ";
-if (!$ok28) {
-    print $base->sysmsg;
-}
-print "\n";
+#$ok28 = 1;
+#$jobid = undef;
+#defined($jobid) or warn "no job Id is given.               \t";
+#$job = new LSF::Batch::jobPtr ($jobid, 0);
+#$rec = $b->openjobinfo($job,undef,undef,undef,undef,1);
+#$j = $b->readjobinfo;
+#
+#$resreq  = $j->submit->resReq;
+#$aresreq = $j->appResReq;
+#$qresreq = $j->qResReq;
+#$cresreq = $j->combinedResReq;
+#$eresreq = $j->effectiveResReq;
+#$app     = $j->submit->app; 
+#
+#print "job $jobid, resReq          = $resreq \n";
+#print "job $jobid, appResReq       = $aresreq \n";
+#print "job $jobid, qResReq         = $qresreq \n";
+#print "job $jobid, combinedResReq  = $cresreq \n";
+#print "job $jobid, effectiveResReq = $eresreq \n";
+#print "job $jobid, app             = $app \n";
+#
+#print "not " unless $ok28;
+#print "ok 28     ";
+#if (!$ok28) {
+#    print $base->sysmsg;
+#}
+#print "\n";
 
