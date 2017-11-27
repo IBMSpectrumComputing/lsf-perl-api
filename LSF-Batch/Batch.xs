@@ -10157,6 +10157,14 @@ ji_maxMem(self)
     OUTPUT:
 	RETVAL
 
+int
+ji_avgMem(self)
+        LSF_Batch_jobInfo *self
+    CODE:
+        RETVAL = self->avgMem;
+    OUTPUT:
+        RETVAL
+
 char *
 ji_appResReq(self)
 	LSF_Batch_jobInfo *self
