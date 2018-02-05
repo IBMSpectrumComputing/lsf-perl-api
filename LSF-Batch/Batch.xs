@@ -10893,6 +10893,15 @@ sub_exceptList(self)
     OUTPUT:
 	RETVAL
 
+char *
+sub_sla(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->sla;
+    OUTPUT:
+	RETVAL
+
+
 MODULE = LSF::Batch       PACKAGE = LSF::Batch::jobPtr  PREFIX = job_
 
 void
