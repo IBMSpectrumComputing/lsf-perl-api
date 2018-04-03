@@ -7,7 +7,7 @@ Batch.xs
 Changes
 MANIFEST
 Makefile.PL
-README
+README.md
 test.pl
 typemap
 ppport.h
