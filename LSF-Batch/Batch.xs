@@ -6133,6 +6133,11 @@ END:
 void
 free_rsvaddreq(struct addRsvRequest *req)
 {
+/* LSF 10.1 or above*/
+#if LSF_VERSION >= 34
+        safefree(req->PKVPs->daemon_time);
+        safefree(req->PKVPs);
+#endif
   safefree(req->askedHosts);
   safefree(req);
 }
@@ -6785,6 +6790,17 @@ do_rsvadd(sub)
     CODE:
         req = (struct addRsvRequest*)safemalloc(sizeof(struct addRsvRequest));
         bzero(req, sizeof(struct addRsvRequest));
+#if LSF_VERSION >= 34
+        req->PKVPs = (PKVP *)calloc(1, sizeof(PKVP));
+        if (req->PKVPs == NULL) {
+                safefree(req);
+                SET_LSB_ERRMSG;
+                XSRETURN_EMPTY;
+        }
+        req->PKVPs->num_params = 0;
+        req->PKVPs->param = NULL;
+        req->PKVPs->daemon_time = putstr_("");
+#endif
         rsvid = (char *)safemalloc(MAXLSFNAMELEN * 2 * sizeof(char));
         if (format_rsvaddreq(req, sub) < 0) {
             free_rsvaddreq(req);
