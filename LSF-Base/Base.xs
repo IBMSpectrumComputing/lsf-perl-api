@@ -738,22 +738,28 @@ ls_resreq(self, task)
 
 void
 ls_eligible( self, task, mode )
-	void	*self
-	char*	task
-	int	mode
+        void    *self
+        char*   task
+        int     mode
     PREINIT:
-	char resreqstr[1024];
-	int ret;
+        char resreqstr[1024];
+        char * resreq;
+        int ret, i;
     PPCODE:
-	ret = ls_eligible(task, resreqstr, mode);
-	if( ret < 0 ){
-	    STATUS_NATIVE_SET(lserrno);
-	    SET_LSF_ERRMSG;
-	    XSRETURN_EMPTY;
- 	}
+        resreq = (char *) calloc(sizeof(resreqstr), sizeof(char));
+        ret = ls_eligible(task, &resreq, mode);
+        if( ret < 0 ){
+            STATUS_NATIVE_SET(lserrno);
+            SET_LSF_ERRMSG;
+            if (resreq) free(resreq);
+            XSRETURN_EMPTY;
+        }
+        for(i=0; i<sizeof(resreqstr); i++) resreqstr[i] = resreq[i];
+        free(resreq);
+
         XPUSHs(sv_2mortal(newSViv(ret)));
-	XPUSHs(sv_2mortal(newSVpv(resreqstr,0)));
-	XSRETURN(2);	    
+        XPUSHs(sv_2mortal(newSVpv(resreqstr,0)));
+        XSRETURN(2);
 
 int
 ls_insertrtask(self, task)
