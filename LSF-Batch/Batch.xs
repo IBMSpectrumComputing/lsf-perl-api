@@ -10646,6 +10646,15 @@ ji_adminFactorVal(self)
     OUTPUT:
 	RETVAL
 
+int
+ji_runTime(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->runTime;
+    OUTPUT:
+	RETVAL
+
+
 #endif
 
 
@@ -10901,6 +10910,14 @@ sub_sla(self)
     OUTPUT:
 	RETVAL
 
+int
+sub_runtimeEstimation(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->runtimeEstimation;
+    OUTPUT:
+	RETVAL
+	
 
 MODULE = LSF::Batch       PACKAGE = LSF::Batch::jobPtr  PREFIX = job_
 
