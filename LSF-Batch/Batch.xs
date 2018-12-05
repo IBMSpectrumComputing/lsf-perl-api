@@ -6817,6 +6817,7 @@ do_submit(sub)
         s = (struct submit *)safemalloc(sizeof(struct submit));
         j = (LSF_Batch_job *)safemalloc(sizeof(LSF_Batch_job));
         initialize_submit(s);
+        memset(&reply, 0, sizeof(reply));
        if( format_submit(s, sub) == 0 ){
           jobId = lsb_submit( s, &reply);
           j->jobId = LSB_ARRAY_JOBID(jobId);
@@ -6827,7 +6828,7 @@ do_submit(sub)
           else{
 	    j->badJobId = reply.badJobId;
             j->badReqIndx = reply.badReqIndx;
-            strncpy(j->badJobName, reply.badJobName, MAX_LSB_NAME_LEN);
+            if (reply.badJobName) strncpy(j->badJobName, reply.badJobName, MAX_LSB_NAME_LEN);
             STATUS_NATIVE_SET(lsberrno);
 	    SET_LSB_ERRMSG;
           }
