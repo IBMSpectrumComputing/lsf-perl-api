@@ -10131,7 +10131,7 @@ ji_numReasons(self)
        RETVAL = self -> numReasons;    
     OUTPUT:                            
        RETVAL                          
-                                       
+
 char *
 ji_user(self)
 	LSF_Batch_jobInfo *self
@@ -10622,6 +10622,26 @@ ji_licenseNames(self)
       XPUSHs(sv_2mortal(newSVpv(self->licenseNames[i],0)));	
 	}
 	XSRETURN(self->numLicense);    
+
+int
+ji_numToHosts4Slots(self)
+	LSF_Batch_jobInfo *self
+    CODE:
+	RETVAL = self->numToHosts4Slots;
+    OUTPUT:
+	RETVAL
+
+void
+ji_toHosts4Slots(self)
+	LSF_Batch_jobInfo *self
+    PREINIT:
+	int i;
+    PPCODE:
+	for( i = 0; i < self->numToHosts4Slots; i++ ){
+      XPUSHs(sv_2mortal(newSVpv(self->toHosts4Slots[i],0)));	
+	}
+	XSRETURN(self->numToHosts4Slots);    
+
 
 float
 ji_aps(self)
