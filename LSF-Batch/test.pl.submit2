@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use LSF::Base;
+use LSF::Batch;
+$base = new LSF::Base;
+$batch = new LSF::Batch "myTestApplication";
+$job = $batch->submit(-J => "test_fbo", -q => "normal", -R => "mg rusage[mem=1024]", -P => "cad_support", -command => "sleep 300");
+$id = $job->jobId;
+print("Id=$id\n");
+sleep(3);
+$job_queue = $job->queue;
+if ($job->modify(-R => "select[mg] rusage[mem=2048]"))
+{
+    print("Ok\n");
+}
+else
+{
+    print("Unable to modify job $id: $@");
+}
