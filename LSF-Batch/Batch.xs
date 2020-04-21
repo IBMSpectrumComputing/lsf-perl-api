@@ -10983,6 +10983,7 @@ do_modify(self, sub)
                s->command = (char *)calloc(64, sizeof(char));
                lsb_jobid2str_r(LSB_JOBID(self->jobId,self->arrayIdx), s->command);
            }
+           s->options |= SUB_MODIFY;  
 	   error = lsb_modify(s, &reply, LSB_JOBID(self->jobId,self->arrayIdx));
           if(error != -1){
 	    strncpy(self->queue, reply.queue, MAX_LSB_NAME_LEN);
