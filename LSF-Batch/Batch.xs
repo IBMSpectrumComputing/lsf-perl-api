@@ -10985,8 +10985,11 @@ do_modify(self, sub)
            }
            s->options |= SUB_MODIFY;  
 	   error = lsb_modify(s, &reply, LSB_JOBID(self->jobId,self->arrayIdx));
-          if(error != -1){
-	    strncpy(self->queue, reply.queue, MAX_LSB_NAME_LEN);
+          if(error >= 0){
+            if (NULL != reply.queue)
+            {
+                strncpy(self->queue, reply.queue, MAX_LSB_NAME_LEN);
+            }
             RETVAL = 1;
           }
           else{
