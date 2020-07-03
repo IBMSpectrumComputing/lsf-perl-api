@@ -10973,6 +10973,7 @@ do_modify(self, sub)
         LSF_Batch_job *j;
         int error;
     CODE:
+        memset(&reply, 0, sizeof(struct submitReply));
         s = (struct submit *)safemalloc(sizeof(struct submit));
         initialize_submit(s);
 	if(format_submit(s, sub) < 0 ){
