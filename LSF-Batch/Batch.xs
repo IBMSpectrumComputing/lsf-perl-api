@@ -6785,6 +6785,8 @@ do_rsvadd(sub)
     CODE:
         req = (struct addRsvRequest*)safemalloc(sizeof(struct addRsvRequest));
         bzero(req, sizeof(struct addRsvRequest));
+        req->PKVPs = (PKVP*)safemalloc(sizeof(PKVP));
+        req->PKVPs->num_params = 0;
         rsvid = (char *)safemalloc(MAXLSFNAMELEN * 2 * sizeof(char));
         if (format_rsvaddreq(req, sub) < 0) {
             free_rsvaddreq(req);
@@ -7032,6 +7034,10 @@ lsb_hostinfo(self, hosts)
 	    XSRETURN_EMPTY;
  	}
 	for( i = 0, p = hinfo; i < num; i++,p++ ){
+	    if(NULL == p){
+	        continue;
+	    }
+
 	    rv = newRV_inc(&PL_sv_undef);
 	    sv_setref_iv(rv, "LSF::Batch::hostInfoPtr",(IV)p);
 	    XPUSHs(sv_2mortal(rv));
