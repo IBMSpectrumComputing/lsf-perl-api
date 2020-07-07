@@ -11353,6 +11353,7 @@ lsb_pendreason(self,numReason,rsTb,jInfoH,loadIndex,clusterId)
 	    SET_LSB_ERRMSG_TO("Unable to allocate memory for reason Table.");
 	    XSRETURN_UNDEF;
         }
+        memset(temp, 0, (len + 1) * sizeof(int));
         for(i=0; i<=len; i++){
             element = av_shift(rsTb);
             if(!SvIOK(element)){
