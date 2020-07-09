@@ -6786,7 +6786,7 @@ do_rsvadd(sub)
         req = (struct addRsvRequest*)safemalloc(sizeof(struct addRsvRequest));
         bzero(req, sizeof(struct addRsvRequest));
         req->PKVPs = (PKVP*)safemalloc(sizeof(PKVP));
-        req->PKVPs->num_params = 0;
+        bzero(req->PKVPs, sizeof(PKVP));
         rsvid = (char *)safemalloc(MAXLSFNAMELEN * 2 * sizeof(char));
         if (format_rsvaddreq(req, sub) < 0) {
             free_rsvaddreq(req);
