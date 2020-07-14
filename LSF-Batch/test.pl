@@ -551,18 +551,18 @@ if (!$ok21) {
 }
 print "\n";
 #***************************************************
-
-$ok22 = 1;
-$err = 0;
-$res = $b->removereservation($rsvId) or $err = 1;
-$ok22 = 0 if $err;
-
-print "not " unless $ok22;
-print "ok 22     ";
-if (!$ok22) {
-    print $b->sysmsg;
-}
-print "\n";
+#
+#$ok22 = 1;
+#$err = 0;
+#$res = $b->removereservation($rsvId) or $err = 1;
+#$ok22 = 0 if $err;
+#
+#print "not " unless $ok22;
+#print "ok 22     ";
+#if (!$ok22) {
+#    print $b->sysmsg;
+#}
+#print "\n";
 #*************************************************
 $ok23 =1;
 $jobId = undef;
