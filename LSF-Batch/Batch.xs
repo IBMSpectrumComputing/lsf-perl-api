@@ -11340,6 +11340,7 @@ lsb_pendreason(self,numReason,rsTb,jInfoH,loadIndex,clusterId)
 	int   *temp = NULL;
 	int   i;
 	SV    *element;
+    char  *ld[RETSTR_SIZE] = {};
     CODE:
         len = av_len(rsTb);
         if(len < 0){
@@ -11363,10 +11364,15 @@ lsb_pendreason(self,numReason,rsTb,jInfoH,loadIndex,clusterId)
                     temp[i] = SvIV(element);
             }
         }   
-        for( h = loadIndex; loadIndex && *h; h++ ) count++;
+        for( h = loadIndex; loadIndex && *h; h++ ) 
+        {
+            ld[count] = (char *)malloc((strlen(loadIndex[count]) + 1) * sizeof(char));
+            strcpy(ld[count], loadIndex[count]);
+            count++;
+        }
         s = (struct loadIndexLog *)safemalloc (sizeof (struct loadIndexLog));
         s->nIdx = count;
-        s->name = loadIndex;
+        s->name = ld;
         RETVAL = lsb_pendreason(numReason, temp, jInfoH, s, clusterId);
         safefree(temp);
         safefree(s);
