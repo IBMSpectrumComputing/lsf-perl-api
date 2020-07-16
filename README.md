@@ -8,9 +8,9 @@ If you plan or would like to contribute to the library, you must follow the DCO 
 
 Each of the LSF-Base and LSF-Batch repositories include their own separate release information.  Please see those repositories README.md files for more information
 
-These perl modules allow you to call the LSF APIs directly through perl.
+These perl modules allow you to call the LSF APIs directly through perl. You can find [some examples here](https://github.com/IBMSpectrumComputing/lsf-perl-api/blob/master/LSF-Batch/test.pl).
 
-You are encouraged to contribute your own perl module enhancements to the Open Source LSF APIs for perl, and you may find some examples in [IBM Support Community](https://www.ibm.com/mysupport/s/ibm-community-support-search-results?q=LSF+Perl+API&page=1&sort=0).
+You are encouraged to contribute your own perl module enhancements to the Open Source LSF APIs for perl, and you may find more information and usage notes in [IBM Support Community](https://www.ibm.com/mysupport/s/ibm-community-support-search-results?q=LSF+Perl+API&page=1&sort=0).
 
 IBM provides formal support for this software to entitled clients via the normal IBM support channels.
 
