@@ -1,4 +1,4 @@
-# IBM Spectrum LSF Perl API
+# LSF Perl API
 
 These perl modules allow customers to submit and control jobs and obtain status of queues, hosts and other LSF attributes from within perl directly.  They work with various versions of LSF and are maintained by LSF developement, though we take contributions from the Open Source community.
 
