@@ -10897,6 +10897,14 @@ sub_projectName(self)
     OUTPUT:
 	RETVAL
 
+char *
+sub_licenseProject(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->licenseProject;
+    OUTPUT:
+	RETVAL
+
 int
 sub_maxNumProcessors(self)
 	LSF_Batch_submit *self
