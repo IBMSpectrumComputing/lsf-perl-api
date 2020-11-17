@@ -12545,6 +12545,13 @@ jnl2_commandSpool(self)
     OUTPUT:
 	RETVAL
 
+char *
+jnl2_licenseProject(self)
+	LSF_Batch_jobNewLog *self
+    CODE:
+	RETVAL = self->licenseProject;
+    OUTPUT:
+	RETVAL
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::jobModLogPtr PREFIX = jml_
 
@@ -12928,6 +12935,13 @@ jml_commandSpool(self)
     OUTPUT:
 	RETVAL
 
+char *
+jml_licenseProject(self)
+	LSF_Batch_jobModLog *self
+    CODE:
+	RETVAL = self->licenseProject;
+    OUTPUT:
+	RETVAL
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::jobStartLogPtr PREFIX = jsl2_
 
@@ -14418,6 +14432,13 @@ jfl_commandSpool(self)
     OUTPUT:
 	RETVAL
 
+char *
+jfl_licenseProject(self)
+	LSF_Batch_jobFinishLog *self
+    CODE:
+	RETVAL = self->licenseProject;
+    OUTPUT:
+	RETVAL
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::loadIndexLogPtr PREFIX = lil_
 
