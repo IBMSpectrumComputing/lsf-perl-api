@@ -9959,8 +9959,20 @@ lsb_readjobinfo(self)
 	void *self;
     PREINIT:
 	int more;
+	int i = 0;
+	struct jobInfoEnt *jobInfo = NULL;
     CODE:
-	RETVAL = lsb_readjobinfo(&more);
+	jobInfo = lsb_readjobinfo(&more);
+	if(NULL != jobInfo && jobInfo->startTime <= 0 && jobInfo->numExHosts > 0)
+	{
+		for (i=0; i < jobInfo->numExHosts; i++)
+		{
+			safefree(jobInfo->exHosts[i]);
+		}
+		safefree(jobInfo->exHosts);
+		jobInfo->numExHosts = 0;
+	}
+	RETVAL = jobInfo;
 	if(RETVAL == NULL){
 	   STATUS_NATIVE_SET(lsberrno);
 	   SET_LSB_ERRMSG;
