@@ -9960,16 +9960,17 @@ lsb_readjobinfo(self)
     PREINIT:
 	int more;
 	int i = 0;
+	int len = 0;
 	struct jobInfoEnt *jobInfo = NULL;
     CODE:
 	jobInfo = lsb_readjobinfo(&more);
 	if(NULL != jobInfo && jobInfo->startTime <= 0 && jobInfo->numExHosts > 0)
 	{
-		for (i=0; i < jobInfo->numExHosts; i++)
+		for (i = 0; i < jobInfo->numExHosts; i++)
 		{
-			safefree(jobInfo->exHosts[i]);
+			len = strlen(jobInfo->exHosts[i]);
+			memset(jobInfo->exHosts[i], 0, sizeof(len * sizeof(char)));
 		}
-		safefree(jobInfo->exHosts);
 		jobInfo->numExHosts = 0;
 	}
 	RETVAL = jobInfo;
