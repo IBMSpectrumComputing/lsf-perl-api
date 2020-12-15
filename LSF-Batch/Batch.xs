@@ -9969,7 +9969,7 @@ lsb_readjobinfo(self)
 		for (i = 0; i < jobInfo->numExHosts; i++)
 		{
 			len = strlen(jobInfo->exHosts[i]);
-			memset(jobInfo->exHosts[i], 0, sizeof(len * sizeof(char)));
+			memset(jobInfo->exHosts[i], 0, (len + 1) * sizeof(char));
 		}
 		jobInfo->numExHosts = 0;
 	}
