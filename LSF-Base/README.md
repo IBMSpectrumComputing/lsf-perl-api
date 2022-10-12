@@ -5,10 +5,10 @@ The LSF Base API allows for querying of host information including load, model a
 ## Release Information
 
 * LSF-Base Perl Module for LSF
-* Supporting LSF Release: 9.1.2
+* Supporting LSF Release: 10.1
 * Module Version: 1.01
 * Publication date: 21 October 2013
-* Last modified: 3 December 2013
+* Last modified: 12 October 2022
 
 ## Contents
  
