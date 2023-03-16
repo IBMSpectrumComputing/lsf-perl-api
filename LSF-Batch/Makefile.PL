@@ -32,7 +32,7 @@ for($os){
   /OSF1/ && do{$libs = "-L$lsfLib -llsf -lbat -lmach -lmld";};
   /AIX/ && do{$libs = "-L$lsfLib -llsf -lbat -lbsd";};
   /SunOS/ && do{$libs = "-L$lsfLib -lbat -llsf -lnsl -lsocket -lrpcsvc -lgen -ldl -lresolv";};
-  /Linux/ && do{$libs = "-L$lsfLib -lbat -llsf -lrt";};
+  /Linux/ && do{$libs = "-L$lsfLib -lbat -llsf -lnsl -lrt";};
 }
 
 WriteMakefile(
