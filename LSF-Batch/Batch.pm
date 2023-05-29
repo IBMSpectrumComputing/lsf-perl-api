@@ -785,6 +785,31 @@ sub submit{
   }
 }
 
+sub limitInfo {
+  my $self = shift;
+  my %limitreq;
+  my ($key,$value,$port,$size,$lsinfo,@limitInfo);
+
+  #parse the arguments and build a hash to pass to the XS do_limitInfo call.
+  return eval{
+  PARSE:
+    while(@_){
+      $_ = shift;
+      #print "got flag $_\n";
+      die "invalid argument $_ \n" unless /^-/;
+      if( @_ and $_[0] !~ /^-/ ){
+    $limitreq{$_} = shift;
+      }
+      else{
+    $limitreq{$_} = "";
+      }
+    }
+    ($port,$size,$lsinfo,@limitInfo) = do_limitInfo(\%limitreq);
+    return ($port,$size,$lsinfo,@limitInfo);
+    #return do_limitInfo(\%limitreq);
+  }
+}
+
 sub bjobs_psum {
   my $self = shift;
   my %jreq;
@@ -1585,6 +1610,24 @@ Corporation's Load Sharing Facility (LSF).
 
   #error messages. Note: calls set $? and $@ and return appropriate
   #values upon failure.
+  
+  ($port, $size, $lsinfo, @limitInfo) = $batch->limitInfo(
+                "-c",   #show config information
+                "-a",   #show usage information
+                "-u"               =>  "user",
+                "-q"               =>  "queueName"
+ 
+  );
+
+  print $port;
+  print $size;
+  $limit = $(limitInfo[0]);
+  $name = $limit->name;
+  $confInfo = $limit->confInfo;
+  $usageC = $limit->usageC;
+  @usageInfo = $limit->usageInfo;
+  $ineligible = $limit->ineligible;
+   
 
 =head1 DESCRIPTION
 
@@ -1641,6 +1684,13 @@ corresponding to lsberrno. C<usrMsg> is an error message supplied by user.
 =item $job = $batch->submit(params);
 
 This routine submits a job to LSF according to the hash paramters C<params>.
+
+=item ($port, $size, $lsInfo, @limitInfo) = $batch->limitInfo(params);
+
+This routine query limitInfo per request. C<params> is a
+hash variable to hold the request options. $port indicates successful or not.
+< 0 for failed. $size is the size of @limitInfo. $lsInfo is the lsInfo need
+to parse the limit.
 
 =item $job->modify(params);
 

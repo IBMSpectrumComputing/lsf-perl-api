@@ -78,6 +78,12 @@ LSF_Batch_hostRsvInfoEnt * T_PTROBJ_SPECIAL
 LSF_Batch_pidInfo * T_PTROBJ_SPECIAL
 LSF_Batch_jobResizeReleaseLog * T_PTROBJ_SPECIAL
 LSF_Batch_jobResizeCancelLog  * T_PTROBJ_SPECIAL
+LSF_Batch_limitConsumer * T_PTROBJ_SPECIAL
+LSF_Batch_limitResource * T_PTROBJ_SPECIAL
+LSF_Batch_limitItem * T_PTROBJ_SPECIAL
+LSF_Batch_limitInfoReq * T_PTROBJ_SPECIAL
+LSF_Batch_limitInfoEnt * T_PTROBJ_SPECIAL
+consumerType  T_ENUM
 LS_LONG_INT * T_PTROBJ_SPECIAL             
 float T_FLOAT
 int * T_PACKED
