@@ -1615,8 +1615,12 @@ Corporation's Load Sharing Facility (LSF).
                 "-c",   #show config information
                 "-a",   #show usage information
                 "-u"               =>  "user",
-                "-q"               =>  "queueName"
- 
+                "-q"               =>  "queue",
+                "-n"               =>  "limit name",
+                "-P"               =>  "project",
+                "-m"               =>  "host",
+                "-A"               =>  "app",
+                "-Lp"              =>  "license project"
   );
 
   print $port;

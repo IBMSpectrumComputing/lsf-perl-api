@@ -6600,7 +6600,6 @@ free_rjmreq(struct jobExternalMsgReq *req)
     return 0;
 }
 
-
 int
 format_limitInfoReq(limitInfoReq *req, HV *hv)
 {
@@ -6613,6 +6612,7 @@ format_limitInfoReq(limitInfoReq *req, HV *hv)
   int size;
   int i;
   consumerType ctype;
+  int pcnt=0, qcnt=0, ucnt=0, hcnt=0, ccnt=0, acnt=0;
 
   size = hv_iterinit(hv);
 #ifdef _AIX
@@ -6636,12 +6636,42 @@ format_limitInfoReq(limitInfoReq *req, HV *hv)
         req->consumerV[i].name = (char*)SvPV(val, len);
         i++;
         req->consumerC = i;
+        qcnt++;
+        break;
+      case 'P':
+        req->consumerV[i].type = LIMIT_PROJECTS;
+        req->consumerV[i].name = (char*)SvPV(val, len);
+        i++;
+        req->consumerC = i;
+        pcnt++;
         break;
       case 'u':
         req->consumerV[i].type = LIMIT_USERS;
         req->consumerV[i].name = (char*)SvPV(val, len);
         i++;
         req->consumerC = i;
+        ucnt++;
+        break;
+      case 'm':
+        req->consumerV[i].type = LIMIT_HOSTS;
+        req->consumerV[i].name = (char*)SvPV(val, len);
+        i++;
+        req->consumerC = i;
+        hcnt++;
+        break;
+      case 'C':
+        req->consumerV[i].type = LIMIT_CLUSTERS;
+        req->consumerV[i].name = (char*)SvPV(val, len);
+        i++;
+        req->consumerC = i;
+        ccnt++;
+        break;
+      case 'A':
+        req->consumerV[i].type = LIMIT_APPS;
+        req->consumerV[i].name = (char*)SvPV(val, len);
+        i++;
+        req->consumerC = i;
+        acnt++;
         break;
       case 'L':
         if( memcmp( flag, "Lp", 2) == 0 ) {
@@ -6663,10 +6693,22 @@ format_limitInfoReq(limitInfoReq *req, HV *hv)
     }
   }
 
-  if (req->name == NULL) {
-     req->name = (char *) safemalloc (16*sizeof(char));
-     strcpy(req->name, " ");
+  if (pcnt > 1 ||qcnt > 1 ||ucnt > 1 ||hcnt > 1 || ccnt > 1 || acnt > 1) {
+     SET_LSB_ERRMSG_TO( "There has repeating consumer type request" );
+     goto END;
   }
+  if ( hcnt > 0 && ccnt > 0 ) {
+     SET_LSB_ERRMSG_TO( "The -m option cannot be specified with -C");
+     goto END;
+  }
+  if ( getbUsgCfgInfoFlag4Lib() && getbConfigInfoFlag4Lib() ) {
+     SET_LSB_ERRMSG_TO( "The -a option cannot be used with the -c option");
+     goto END;
+  }
+  if (req->name == NULL) {
+     req->name = " ";
+  }
+
   ret = 0;
 END:
   return ret;
@@ -6677,19 +6719,9 @@ free_limitInfoReq(limitInfoReq *req)
 {
   int i;
   if (req) {
-    if (req->name)
-      safefree(req->name);
-
-    if (req->consumerC >0 ){
-      for( i=0; req->consumerV && (i<req->consumerC); i++) {
-        if (req->consumerV[i].name)
-          safefree(req->consumerV[i].name);
-      }
-      safefree(req->consumerV);
-    }
+    safefree(req->consumerV);
+    safefree(req);
   }
-
-  safefree(req);
 }
 
 
@@ -6947,11 +6979,11 @@ do_limitInfo(r)
         HV *r;
     PREINIT:
         SV *rv;
-        int port;
-        limitInfoEnt *info;
-        limitInfoEnt *p;
-        limitInfoReq *req;
-        int size;
+        int port = -1;
+        limitInfoEnt *info = NULL;
+        limitInfoEnt *p = NULL;
+        limitInfoReq *req = NULL;
+        int size = 0;
         int i;
         struct lsInfo lsInfo;
     PPCODE:
@@ -6959,7 +6991,6 @@ do_limitInfo(r)
         bzero(req, sizeof(limitInfoReq));
 
         bzero(&lsInfo, sizeof(struct lsInfo));
-        
 
         if (format_limitInfoReq(req, r) < 0) {
             free_limitInfoReq(req);
@@ -16186,6 +16217,14 @@ limitResource_val(self)
 
 MODULE = LSF::Batch PACKAGE = LSF::Batch::limitItemPtr PREFIX = limitItem_
 
+int
+limitItem_consumerC(self)
+        LSF_Batch_limitItem *self
+    CODE:
+        RETVAL = self->consumerC;
+    OUTPUT:
+        RETVAL
+
 void
 limitItem_consumerV(self)
         LSF_Batch_limitItem *self;
@@ -16201,6 +16240,14 @@ limitItem_consumerV(self)
           XPUSHs(sv_2mortal(rv));
         }
         XSRETURN(self->consumerC);
+
+int
+limitItem_resourceC(self)
+        LSF_Batch_limitItem *self
+    CODE:
+        RETVAL = self->resourceC;
+    OUTPUT:
+        RETVAL
 
 void
 limitItem_resourceV(self)
@@ -16244,7 +16291,7 @@ limitInfoEnt_usageInfo(self)
         int i;
         SV *rv;
     PPCODE:
-        for( i = 0; i < self->usageC; i++){
+        for( i = 0; self->usageInfo && i < self->usageC; i++){
           rv = newRV_inc(&PL_sv_undef);
           sv_setref_iv(rv,
                        "LSF::Batch::limitItemPtr",

@@ -6,15 +6,20 @@ $batch = new LSF::Batch "myTestApplication";
 $ok21 = 1;
 $err = 0;
 ($port, $size, $lsinfo, @limitInfo) = $batch->limitInfo(
+#              "-a",
               "-c",
               "-u"               =>  "zhchgbj",
               "-q"               =>  "priority"
 ) or $err = 1;
 $ok21 = 0 if $err;
-$ok21 = 0 if ($port < 0 || $size <0);
+$ok21 = 0 if ((! $port) || $port < 0 || $size <0);
 print "not " unless $ok21;
 print "ok 21     \n";
-if ($ok21) {
+if(! $ok21)
+{
+  $msg = $batch->sysmsg();
+  print "Failed to call lsb_limitInfo(): $msg\n";
+} else {
   print "return $port\n";
   print "size   $size\n";
   
@@ -36,6 +41,7 @@ if ($ok21) {
         print "  $resname \t= $resval\n";
     }
     @usageInfo = $limit->usageInfo;
+    print "  USAGE:\n";
     foreach $usage (@usageInfo) {
         @resV=$usage->resourceV;
         foreach $res (@resV) {
