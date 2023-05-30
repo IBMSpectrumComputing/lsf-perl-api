@@ -1,0 +1,78 @@
+#!/usr/bin/perl
+use LSF::Base;
+use LSF::Batch;
+$base = new LSF::Base;
+$batch = new LSF::Batch "myTestApplication";
+$ok21 = 1;
+$err = 0;
+($port, $size, $lsinfo, @limitInfo) = $batch->limitInfo(
+#              "-a",
+              "-c",
+              "-u"               =>  "zhchgbj",
+              "-q"               =>  "priority"
+) or $err = 1;
+$ok21 = 0 if $err;
+$ok21 = 0 if ((! $port) || $port < 0 || $size <0);
+print "not " unless $ok21;
+print "ok 21     \n";
+if(! $ok21)
+{
+  $msg = $batch->sysmsg();
+  print "Failed to call lsb_limitInfo(): $msg\n";
+} else {
+  print "return $port\n";
+  print "size   $size\n";
+  
+  foreach $limit (@limitInfo){
+    print "Begin Limit\n";
+    $name = $limit->name;
+    print "  NAME\t= $name\n";
+    $confInfo = $limit->confInfo;
+    @consV=$confInfo->consumerV;
+    @resV=$confInfo->resourceV;
+    foreach $cons (@consV) {
+        $consname = $cons->name;
+        $constype = consType2str($cons->type);
+        print "  $constype \t= $consname\n";
+    }
+    foreach $res (@resV) {
+        $resname = $res->name;
+        $resval = $res->val;
+        print "  $resname \t= $resval\n";
+    }
+    @usageInfo = $limit->usageInfo;
+    print "  USAGE:\n";
+    foreach $usage (@usageInfo) {
+        @resV=$usage->resourceV;
+        foreach $res (@resV) {
+            $resname = $res->name;
+            $resval = $res->val;
+            print "    $resname \t= $resval\n";
+        }
+    }
+    $ineligible = $limit->ineligible;
+    print "End Limit\n";
+  }
+}
+
+sub consType2str {
+  my $conType=shift;
+  my $myself;
+  my $ret;
+
+  $ret = "QUEUES"          if ($conType == 1);  # LIMIT_QUEUES
+  $ret = "PER_QUEUE"       if ($conType == 2);  # LIMIT_PER_QUEUE
+  $ret = "USERS"           if ($conType == 3);  # LIMIT_USERS
+  $ret = "PER_USER"        if ($conType == 4);  # LIMIT_PER_USER
+  $ret = "HOSTS"           if ($conType == 5);  # LIMIT_HOSTS
+  $ret = "PER_HOST"        if ($conType == 6);  # LIMIT_PER_HOST
+  $ret = "PROJECTS"        if ($conType == 7);  # LIMIT_PROJECTS
+  $ret = "PER_PROJECT"     if ($conType == 8);  # LIMIT_PER_PROJECT
+  $ret = "LIC_PROJECTS"    if ($conType == 9);  # LIMIT_LIC_PROJECTS
+  $ret = "PER_LIC_PROJECT" if ($conType == 10);  # LIMIT_PER_LIC_PROJECT
+  $ret = "CLUSTERS"        if ($conType == 11);  # LIMIT_CLUSTERS
+  $ret = "PER_CLUSTER"     if ($conType == 12);  # LIMIT_PER_CLUSTER
+  $ret = "APPS"            if ($conType == 13);  # LIMIT_APPS
+  $ret = "PER_APP"         if ($conType == 14);  # LIMIT_PER_APP
+  return $ret;
+}
