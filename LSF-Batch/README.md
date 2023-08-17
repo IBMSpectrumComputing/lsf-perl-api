@@ -38,6 +38,13 @@ To compile and install the library, go to the source directory and run the follo
 
 `$ sudo make install`
 
+Note: If you are using perl 5.36 or upper, remove following 3 lines from Batch.xs:
+```
+ #ifndef PL_errgv
+ #define PL_errgv errgv
+ #endif
+```
+
 ## Release Notes
 
 ### Release 1.05 - 18/5/2017
