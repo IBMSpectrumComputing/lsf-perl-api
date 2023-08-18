@@ -38,6 +38,13 @@ To compile and install the library, go to the source directory and type:
   
 `$ sudo make install`
 
+Note: If you are using perl 5.36 or upper, remove following 3 lines from Base.xs:
+```
+ #ifndef PL_errgv
+ #define PL_errgv errgv
+ #endif
+```
+
 ## Release Notes
 
 ### Release 1.01 - 27/11/2013:
