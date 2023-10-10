@@ -47,7 +47,7 @@ print "ok 2\n";
 $ok3 = 1;
 
 @user = ( );   
-defined(@user) or warn "no user names are given.           \t";
+warn "no user names are given.           \t" unless (@user);
 
 @userinfo = $b->userinfo(\@user) or $ok3 = 0;
 foreach $user (@userinfo){
@@ -81,7 +81,7 @@ unless( @resinfo ){
 }
 
 @hostparts = ( );
-defined(@hostparts) or warn "no hostparts given.               \t" ;
+warn "no hostparts are given.               \t" unless (@hostparts);
 @partinfo = $b->hostpartinfo(\@hostparts);
 $ok3 = 0 unless @partinfo;
 
@@ -440,7 +440,7 @@ $err6 = 1 unless length($mypeek) != 0;
 @hosts = ();
 $slots = 1;
 $options = RUNJOB_OPT_NORMAL;  # RUNJOB_OPT_NORMAL = 1;
-defined(@hosts) or warn "no host names are given.          \t" ;
+warn "no host names are given.          \t" unless (@hosts);
 $myrun = $myjob->run(\@hosts, $slots, $options);
 $err7 = 1 unless $myrun;
 
