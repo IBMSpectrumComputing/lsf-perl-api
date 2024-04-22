@@ -11031,6 +11031,14 @@ sub_chkpntPeriod(self)
     OUTPUT:
 	RETVAL
 
+int
+sub_userPriority(self)
+	LSF_Batch_submit *self
+    CODE:
+	RETVAL = self->userPriority;
+    OUTPUT:
+	RETVAL
+
 char *
 sub_chkpntDir(self)
 	LSF_Batch_submit *self

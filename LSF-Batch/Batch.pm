@@ -1375,6 +1375,7 @@ Corporation's Load Sharing Facility (LSF).
   $submit->queue;
   $submit->resReq;
   $submit->command;
+  $submit->userPriority;
   #etc.
 
   $batch->closejobinfo();
